@@ -1,0 +1,13 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.sidebar-nav {
+    padding: 9px 0;
+}
+.navbar-profle-image{
+    height: 40px;
+}
+.nav-list-profle-image{
+    height: 100px;
+}

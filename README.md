@@ -1,4 +1,4 @@
-Rede Social
+## Rede social desenvolvida pelos alunos de Programação Web do curso de ADS da Faculdade Integrado
 
 1 - Cadastro público de usuário
 2 - Login e senha
@@ -11,9 +11,6 @@ Rede Social
 9 - Album de fotos
 10 - Compartilhar com outras redes
 
-* chat
+* Chat 
 
 Tecnologias: Java Web com banco de dados MySQL
-
-Facebug
-
