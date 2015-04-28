@@ -4,6 +4,14 @@
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Login</title>
+        <style type="text/css">
+            .control-group .control-label {
+                width: 80px !important;
+            }
+            .form-horizontal .controls {
+                margin-left: 100px !important;
+            }
+        </style>
     </head>
     <body>
         <%@include file="/WEB-INF/includes/topo.jsp" %>
@@ -11,32 +19,77 @@
         <!-- MENU LATERAL ESQUERDO E CONTEÚDO -->
         <div class="container-fluid">
             <div class="row-fluid">
-                <!-- MENU LATERAL ESQUERDO -->
-                <div class="span2">
-                    <%@include file="/WEB-INF/includes/menu.jsp" %>
-                </div>
+                
                 <!--  CONTEÚDO -->
-                <div class="span10">
-
-                    <h1>Faça o seu Login!</h1>
-                    <br />
-                    <form name="login" method="POST" action="LoginServlet" >
-                        <input type="hidden" name="acao" value="login" />
-                        E-mail: <input type="text" name="email" value="" size="40" /> <br />
-                        Senha: <input type="password" name="senha" value="" size="40" /> <br />
-                        <input type="submit" value="Entrar" />
-                    </form>
-                    <br />
-                    <h1>Faça o seu Cadastro!</h1>
-                    <br />
-                    <form name="cadastro" method="POST" action="LoginServlet" >
-                        <input type="hidden" name="acao" value="cadastro" />
-                        Nome: <input type="text" name="nome" value="" size="40" /> <br />
-                        Sobrenome: <input type="text" name="sobrenome" value="" size="40" /> <br />
-                        E-mail: <input type="text" name="email" value="" size="40" /> <br />
-                        Senha: <input type="password" name="senha" value="" size="40" /> <br />
-                        <input type="submit" value="Cadastro" />
-                    </form>
+                <div class="span12" >
+                    
+                    <!-- FORMULARIO DE LOGIN -->
+                    <div class="span5" >
+                        <form name="login" method="POST" action="LoginServlet" class="form-horizontal" style="float: right"  >
+                            <h3 style="float: right">Faça o seu Login!</h3>
+                            <br style="clear: both" />
+                            <input type="hidden" name="acao" value="login" />
+                            <div class="control-group">
+                                <label class="control-label" for="loginEmail">E-mail</label>
+                                <div class="controls">
+                                    <input type="text" id="loginEmail" name="email" value="" size="40" /> 
+                                </div>
+                            </div>
+                            <div class="control-group" >
+                                <label class="control-label" for="loginSenha">Senha</label>
+                                <div class="controls">
+                                    <input type="password" id="loginSenha" name="senha" value="" size="40" /> 
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <input type="submit" value="Entrar" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="span1" style="text-align: center">
+                        <h3>Ou</h3>
+                    </div>
+                    
+                    <!-- FORMULARIO DE CADASTRO -->
+                    <div class="span5" >
+                        <form name="cadastro" method="POST" action="LoginServlet" class="form-horizontal" style="float: left" >
+                            <h3 style="float: right">Faça o seu Cadastro!</h3>
+                            <br style="clear: both" />
+                            <input type="hidden" name="acao" value="cadastro" />
+                            <div class="control-group">
+                                <label class="control-label" for="cadNome">Nome</label>
+                                <div class="controls">
+                                    <input type="text" id="cadNome" name="nome" value="" size="40" /> 
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="cadSobrenome">Sobrenome</label>
+                                <div class="controls">
+                                    <input type="text" id="cadSobrenome" name="sobrenome" value="" size="40" /> 
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="cadEmail">E-mail</label>
+                                <div class="controls">
+                                    <input type="text" id="cadEmail" name="email" value="" size="40" /> 
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="cadSenha">Senha</label>
+                                <div class="controls">
+                                    <input type="password" id="cadSenha" name="senha" value="" size="40" /> 
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <input type="submit" value="Cadastro" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
                 </div>
             </div>
