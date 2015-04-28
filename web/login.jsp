@@ -5,6 +5,9 @@
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Login</title>
         <style type="text/css">
+            /*
+            Código CSS para ajustar o tamanho dos formulários
+            */
             .control-group .control-label {
                 width: 80px !important;
             }
@@ -19,10 +22,10 @@
         <!-- MENU LATERAL ESQUERDO E CONTEÚDO -->
         <div class="container-fluid">
             <div class="row-fluid">
-                
+
                 <!--  CONTEÚDO -->
                 <div class="span12" >
-                    
+
                     <!-- FORMULARIO DE LOGIN -->
                     <div class="span5" >
                         <form name="login" method="POST" action="LoginServlet" class="form-horizontal" style="float: right"  >
@@ -49,10 +52,11 @@
                         </form>
                     </div>
                     
+                    <!-- COLUNA DO MEIO -->
                     <div class="span1" style="text-align: center">
                         <h3>Ou</h3>
                     </div>
-                    
+
                     <!-- FORMULARIO DE CADASTRO -->
                     <div class="span5" >
                         <form name="cadastro" method="POST" action="LoginServlet" class="form-horizontal" style="float: left" >

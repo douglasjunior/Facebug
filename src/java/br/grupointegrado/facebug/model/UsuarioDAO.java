@@ -20,11 +20,11 @@ public class UsuarioDAO {
     }
 
     public UsuarioDAO(Connection conn) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // implementar
     }
 
     public void inserir(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // implementar
     }
 
 }

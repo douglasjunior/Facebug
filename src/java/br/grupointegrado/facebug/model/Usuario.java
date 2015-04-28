@@ -20,8 +20,8 @@ public class Usuario {
         this.senha = senha;
     }
 
-    Usuario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Usuario() {
+    
     }
     
     public int getId() {
