@@ -1,4 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String mensagemErro = (String) request.getAttribute("mensagem_erro");
+    String mensagemSucesso = (String) request.getAttribute("mensagem_sucesso");
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,7 +29,18 @@
 
                 <!--  CONTEÚDO -->
                 <div class="span12" >
-
+                    <% if (mensagemSucesso != null) {%>
+                    <div class="alert alert-success">
+                        <%= mensagemSucesso%>
+                    </div>
+                    <%
+                        }
+                        if (mensagemErro != null) {
+                    %>
+                    <div class="alert alert-error">
+                        <%= mensagemErro%>
+                    </div>
+                    <%}%>
                     <!-- FORMULARIO DE LOGIN -->
                     <div class="span5" >
                         <form name="login" method="POST" action="LoginServlet" class="form-horizontal" style="float: right"  >
@@ -51,7 +66,7 @@
                             </div>
                         </form>
                     </div>
-                    
+
                     <!-- COLUNA DO MEIO -->
                     <div class="span1" style="text-align: center">
                         <h3>Ou</h3>
