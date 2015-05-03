@@ -1,4 +1,8 @@
+<%@page import="br.grupointegrado.facebug.model.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,9 +21,9 @@
                 </div>
                 <!--  CONTEÚDO -->
                 <div class="span10">
-                    
-                    <h1>Bem vindo ao Facebug!</h1>
-                    
+
+                    <h3>Olá <%= usuarioLogado.getNome()%>, bem vindo ao Facebug!</h3>
+
                 </div>
             </div>
         </div>

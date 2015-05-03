@@ -5,9 +5,20 @@ body {
 .sidebar-nav {
     padding: 9px 0;
 }
-.navbar-profle-image{
+.navbar-profile-image{
     height: 40px;
 }
-.nav-list-profle-image{
+.nav-list-profile-image{
     height: 100px;
+}
+.navbar-logo-image {
+    padding: 0px;
+    margin: 0px 10px 0px 0px;
+    height: 40px !important;
+}
+.navbar-inverse .navbar-inner {
+    background-color: #000323;
+    background-image: linear-gradient(to bottom, #00026B, #000142);
+    background-repeat: repeat-x;
+    border-color: #000142;
 }

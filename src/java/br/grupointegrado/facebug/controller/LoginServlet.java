@@ -5,8 +5,6 @@ import br.grupointegrado.facebug.model.UsuarioDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +15,19 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*
+         Verifica qual é a ação que foi recebida via POST
+         */
         String acaoParam = req.getParameter("acao");
         if ("login".equals(acaoParam)) {
             efetuarLogin(req, resp);
         } else if ("cadastro".equals(acaoParam)) {
             efetuarCadastro(req, resp);
+        } else {
+            /*
+             Se nenhuma ação foi recebida, então só encaminha para a página principal
+             */
+            resp.sendRedirect("/Facebug/index.jsp");
         }
     }
 
@@ -57,5 +63,24 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("mensagem_erro", "Não foi possível concluir o cadastro, tente novamente mais tarde.");
         }
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*
+         Verifica qual é a ação que foi recebida via GET
+         */
+        String acaoParam = req.getParameter("acao");
+        if ("sair".equals(acaoParam)) {
+            /*
+            Para efetuar o Logout, basta remover o atributo da sessão
+            */
+            HttpSession sessao = req.getSession();
+            sessao.removeAttribute("usuario_logado");
+        }
+        /*
+         Independende de qualquer ação recebida, sempre encaminha para a página principal
+         */
+        resp.sendRedirect("/Facebug/index.jsp");
     }
 }

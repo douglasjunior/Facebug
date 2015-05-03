@@ -87,6 +87,10 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
+    public String getNomeCompleto(){
+        return getNome() + " " + getSobrenome();
+    }
 
     @Override
     public int hashCode() {
