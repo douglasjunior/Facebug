@@ -17,7 +17,7 @@
                 <ul class="nav pull-right">
                     <li><img class="navbar-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=usuarioLogadoTopo.getNomeCompleto()%>" /></li>
                     <li><a href="#">Perfil</a></li>
-                    <li><a href="/Facebug/LoginServlet?acao=sair">Sair</a></li>
+                    <li><a href="/Facebug/Login?acao=sair">Sair</a></li>
                 </ul>
                 <% }%>
             </div>

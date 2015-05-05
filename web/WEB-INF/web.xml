@@ -25,13 +25,24 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>br.grupointegrado.facebug.controller.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TimelineServlet</servlet-name>
+        <servlet-class>br.grupointegrado.facebug.controller.TimelineServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/LoginServlet</url-pattern>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TimelineServlet</servlet-name>
+        <url-pattern>/Timeline</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>TimelineServlet</welcome-file>
+    </welcome-file-list>
 </web-app>

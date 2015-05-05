@@ -33,7 +33,7 @@ public class LoginFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             System.out.println("Bloqueou: " + req.getServletPath());
-            resp.sendRedirect("/Facebug/login.jsp");
+            resp.sendRedirect("/Facebug/Login");
         }
     }
 
@@ -66,8 +66,7 @@ public class LoginFilter implements Filter {
      */
     private boolean isPaginaLogin(HttpServletRequest req) {
         String servletPath = req.getServletPath();
-        boolean isPaginaLogin = servletPath.equals("/LoginServlet")
-                || servletPath.equals("/login.jsp");
+        boolean isPaginaLogin = servletPath.equals("/Login");
         return isPaginaLogin;
     }
 

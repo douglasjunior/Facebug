@@ -43,7 +43,7 @@
                     <%}%>
                     <!-- FORMULARIO DE LOGIN -->
                     <div class="span5" >
-                        <form name="login" method="POST" action="LoginServlet" class="form-horizontal" style="float: right"  >
+                        <form name="login" method="POST" action="Login" class="form-horizontal" style="float: right"  >
                             <h3 style="float: right">Faça o seu Login!</h3>
                             <br style="clear: both" />
                             <input type="hidden" name="acao" value="login" />
@@ -74,7 +74,7 @@
 
                     <!-- FORMULARIO DE CADASTRO -->
                     <div class="span5" >
-                        <form name="cadastro" method="POST" action="LoginServlet" class="form-horizontal" style="float: left" >
+                        <form name="cadastro" method="POST" action="Login" class="form-horizontal" style="float: left" >
                             <h3 style="float: right">Faça o seu Cadastro!</h3>
                             <br style="clear: both" />
                             <input type="hidden" name="acao" value="cadastro" />

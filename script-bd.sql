@@ -18,6 +18,25 @@ USE `facebugdb`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `postagem`
+--
+
+DROP TABLE IF EXISTS `postagem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `postagem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `texto` longtext NOT NULL,
+  `data` datetime NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `publica` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_postagem_id_usuario_idx` (`id_usuario`),
+  CONSTRAINT `fk_postagem_id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `usuario`
 --
 
@@ -35,7 +54,7 @@ CREATE TABLE `usuario` (
   `senha` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -47,4 +66,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-29 21:22:05
+-- Dump completed on 2015-05-04 22:50:15

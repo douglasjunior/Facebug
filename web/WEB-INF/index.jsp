@@ -22,8 +22,11 @@
                 <!--  CONTEÚDO -->
                 <div class="span10">
 
-                    <h3>Olá <%= usuarioLogado.getNome()%>, bem vindo ao Facebug!</h3>
-
+                    <h3>Olá <%= usuarioLogado.getNome()%>, bem vindo ao Facebug!</h3><br />
+                    <form name="postagem" method="POST" action="Timeline" >
+                        <textarea name="texto" rows="3" style="resize: none; width: 400px" placeholder="O que você não está pensando?" ></textarea> 
+                        <input type="submit" value="Postar" class="btn btn-primary" />
+                    </form>
                 </div>
             </div>
         </div>

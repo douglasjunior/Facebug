@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
             /*
              Se nenhuma ação foi recebida, então só encaminha para a página principal
              */
-            resp.sendRedirect("/Facebug/index.jsp");
+            resp.sendRedirect("/Facebug/Timeline");
         }
     }
 
@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
             if (usuario != null) {
                 HttpSession sessao = req.getSession();
                 sessao.setAttribute("usuario_logado", usuario);
-                resp.sendRedirect("/Facebug/index.jsp");
+                resp.sendRedirect("/Facebug/Timeline");
             } else {
                 req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
@@ -73,14 +73,14 @@ public class LoginServlet extends HttpServlet {
         String acaoParam = req.getParameter("acao");
         if ("sair".equals(acaoParam)) {
             /*
-            Para efetuar o Logout, basta remover o atributo da sessão
+            Para efetuar o Logout, basta invalidar a sessão
             */
             HttpSession sessao = req.getSession();
-            sessao.removeAttribute("usuario_logado");
+            sessao.invalidate();
         }
         /*
          Independende de qualquer ação recebida, sempre encaminha para a página principal
          */
-        resp.sendRedirect("/Facebug/index.jsp");
+        req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
     }
 }
