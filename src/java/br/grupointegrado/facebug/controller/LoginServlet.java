@@ -53,16 +53,27 @@ public class LoginServlet extends HttpServlet {
     }
 
     private void efetuarCadastro(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*
+         * Para evitar duplicidade na subimissão de uma requisição POST,
+         * precisamos respeitar o padrão PRG: http://en.wikipedia.org/wiki/Post/Redirect/Get
+         * Este padrão diz que, a grosso modo: 
+         * Quando uma requisição é bem sucediada deve-se fazer um Redirect para a próxima página.
+         *
+         * Sendo assim, quando a postagem for gravada com sucesso, temos que
+         * efetuar um sendRedirec() para concluir o processo.
+         */
         try {
             Usuario usuario = UsuarioDAO.getUsuarioParameters(req);
             Connection conn = (Connection) req.getAttribute("conexao");
             new UsuarioDAO(conn).inserir(usuario);
-            req.setAttribute("mensagem_sucesso", "Cadastro efetuado com sucesso!");
+            // Enviamos nossa mensagem de sucesso através da sessão.
+            req.getSession().setAttribute("mensagem_sucesso", "Usuário cadastrado com sucesso, efetue Login para continuar.");
+            resp.sendRedirect("/Facebug/Login");
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível concluir o cadastro, tente novamente mais tarde.");
+            req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         }
-        req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
     }
 
     @Override
@@ -73,8 +84,8 @@ public class LoginServlet extends HttpServlet {
         String acaoParam = req.getParameter("acao");
         if ("sair".equals(acaoParam)) {
             /*
-            Para efetuar o Logout, basta invalidar a sessão
-            */
+             Para efetuar o Logout, basta invalidar a sessão
+             */
             HttpSession sessao = req.getSession();
             sessao.invalidate();
         }

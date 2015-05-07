@@ -2,13 +2,18 @@ package br.grupointegrado.facebug.model;
 
 import br.grupointegrado.facebug.util.ConversorUtil;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 
-public class UsuarioDAO {
+public class UsuarioDAO extends DAO {
 
+    /**
+     * Monta um objeto Usuário a partir dos dados vindos da requsição HTTP.
+     *
+     * @param req
+     * @return
+     */
     public static Usuario getUsuarioParameters(HttpServletRequest req) {
         Usuario usuario = new Usuario();
         usuario.setId(ConversorUtil.stringParaInteger(req.getParameter("id")));
@@ -22,43 +27,70 @@ public class UsuarioDAO {
         return usuario;
     }
 
-    private final Connection conn;
-
     public UsuarioDAO(Connection conn) {
-        this.conn = conn;
+        super(conn);
     }
 
+    /**
+     * Insere um novo Usuario no banco de dados.
+     *
+     * @param usuario
+     * @throws SQLException
+     */
     public void inserir(Usuario usuario) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO usuario (nome, sobrenome, nascimento, apelido, foto, email,  senha) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?) ");
-        ps.setString(1, usuario.getNome());
-        ps.setString(2, usuario.getSobrenome());
-        ps.setDate(3, ConversorUtil.dateParaSQLDate(usuario.getNascimento()));
-        ps.setString(4, usuario.getApelido());
-        ps.setBytes(5, usuario.getFoto());
-        ps.setString(6, usuario.getEmail());
-        ps.setString(7, usuario.getSenha());
-        ps.execute();
-        ps.close();
+        // Chamada do métoto genérico executaSQL(), basta passar os parâmetros na ordem correta
+        executaSQL("INSERT INTO usuario (nome, sobrenome, nascimento, apelido, foto, email,  senha) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
+                usuario.getNome(),
+                usuario.getSobrenome(),
+                ConversorUtil.dateParaSQLDate(usuario.getNascimento()),
+                usuario.getApelido(),
+                usuario.getFoto(),
+                usuario.getEmail(),
+                usuario.getSenha());
     }
 
+    /**
+     * Consulta um Usuário a partir do e-mail e senha.
+     *
+     * @param email
+     * @param senha
+     * @return
+     * @throws SQLException
+     */
     public Usuario consultaEmailSenha(String email, String senha) throws SQLException {
-        Usuario usuario = null;
-        PreparedStatement ps = conn.prepareStatement(
-                "SELECT * FROM usuario WHERE email = ? AND senha = ? ");
-        ps.setString(1, email);
-        ps.setString(2, senha);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            usuario = montaUsuario(rs);
-        }
-        rs.close();
-        ps.close();
-        return usuario;
+        // Utilizo o método genérico para fazer a consulta.
+        Object usuario = consultaUm("SELECT * FROM usuario WHERE email = ? AND senha = ? ", email, senha);
+        // Podemos fazer um cast de Object para Usuário sem problemas, 
+        // pois a implementação do nosso método montaObjeto() criou um objeto do tipo Usuário.
+        return (Usuario) usuario;
     }
 
-    private Usuario montaUsuario(ResultSet rs) throws SQLException {
+    /**
+     * Consulta um usuário a partir de seu ID.
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public Usuario consultaId(int id) throws SQLException {
+        // Utilizo o método genérico para fazer a consulta.
+        Object usuario = consultaUm("SELECT * FROM usuario WHERE id = ? ", id);
+        // Podemos fazer um cast de Object para Usuário sem problemas, 
+        // pois a implementação do nosso método montaObjeto() criou um objeto do tipo Usuário.
+        return (Usuario) usuario;
+    }
+
+    /**
+     * Implementação do método abstrato, responsável por montar um Usuário a
+     * partir dos dados do ResultSet.
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    protected Object montaObjeto(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
         usuario.setId(rs.getInt("id"));
         usuario.setNome(rs.getString("nome"));
@@ -68,20 +100,6 @@ public class UsuarioDAO {
         usuario.setNascimento(rs.getDate("nascimento"));
         usuario.setApelido(rs.getString("apelido"));
         usuario.setFoto(rs.getBytes("foto"));
-        return usuario;
-    }
-
-    Usuario consultaId(int id) throws SQLException {
-    Usuario usuario = null;
-        PreparedStatement ps = conn.prepareStatement(
-                "SELECT * FROM usuario WHERE id = ? ");
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            usuario = montaUsuario(rs);
-        }
-        rs.close();
-        ps.close();
         return usuario;
     }
 

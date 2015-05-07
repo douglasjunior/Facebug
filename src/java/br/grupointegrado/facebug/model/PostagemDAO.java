@@ -2,55 +2,72 @@ package br.grupointegrado.facebug.model;
 
 import br.grupointegrado.facebug.util.ConversorUtil;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
-public class PostagemDAO {
+public class PostagemDAO extends DAO {
 
+    /**
+     * Monta um objeto Postagem a partir dos dados vindos na requisição HTTP.
+     *
+     * @param req
+     * @return
+     */
     public static Postagem getPostagemParameters(HttpServletRequest req) {
         Postagem postagem = new Postagem();
         postagem.setTexto(req.getParameter("texto"));
         postagem.setPublica("on".equals(req.getParameter("publica")));
         return postagem;
     }
-    private final Connection conn;
 
     public PostagemDAO(Connection conn) {
-        this.conn = conn;
+        super(conn);
     }
 
+    /**
+     * Insere uma nova postagem no banco de dados.
+     *
+     * @param postagem
+     * @throws SQLException
+     */
     public void inserir(Postagem postagem) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO postagem (texto, data, id_usuario, publica) "
-                + "VALUES (?, ?, ?, ?) ");
-        ps.setString(1, postagem.getTexto());
-        ps.setTimestamp(2, ConversorUtil.dateParaTimeStamp(postagem.getData()));
-        ps.setInt(3, postagem.getUsuario().getId());
-        ps.setBoolean(4, postagem.isPublica());
-        ps.execute();
-        ps.close();
+        executaSQL("INSERT INTO postagem (texto, data, id_usuario, publica) "
+                + "VALUES (?, ?, ?, ?) ",
+                postagem.getTexto(),
+                ConversorUtil.dateParaTimeStamp(postagem.getData()),
+                postagem.getUsuario().getId(),
+                postagem.isPublica());
     }
 
+    /**
+     * Carrega as últimas postagens do Usuário que está logado. Nessas últimas
+     * postagens devem conter: <br>
+     * - Suas próprias postagens; <br>
+     * - Postagens de amigos.
+     *
+     * @param usuarioLogado
+     * @return
+     * @throws SQLException
+     */
     public List<Postagem> ultimasPostagens(Usuario usuarioLogado) throws SQLException {
-        List<Postagem> postagens = new ArrayList<Postagem>();
-        PreparedStatement ps = conn.prepareStatement(
-                "SELECT * FROM postagem WHERE id_usuario = ? ORDER BY id DESC");
-        ps.setInt(1, usuarioLogado.getId());
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Postagem postagem = montaPostagem(rs);
-            postagens.add(postagem);
-        }
-        rs.close();
-        ps.close();
+        // Chama o método genérico consultaLista()
+        List postagens = consultaLista(
+                "SELECT * FROM postagem WHERE id_usuario = ? ORDER BY id DESC",
+                usuarioLogado.getId());
         return postagens;
     }
 
-    private Postagem montaPostagem(ResultSet rs) throws SQLException {
+    /**
+     * Monta um objeto Postagem a partir dos dados do ResultSer.
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    protected Object montaObjeto(ResultSet rs) throws SQLException {
         Postagem postagem = new Postagem();
         postagem.setId(rs.getInt("id"));
         postagem.setTexto(rs.getString("texto"));

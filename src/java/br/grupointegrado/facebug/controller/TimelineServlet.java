@@ -26,20 +26,35 @@ public class TimelineServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // implementar consulta
-        try{
+        /*
+        * Neste método devemos carregar todos os dados necessários para exibir na Timeline
+        */
+        try {
             Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
             Connection conn = (Connection) req.getAttribute("conexao");
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
+            req.setAttribute("mensagem_erro", "Não foi possível carregar a timeline completamente, tente novamente mais tarde.");
         }
         req.getRequestDispatcher("/WEB-INF/index.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*
+         * Para evitar duplicidade na subimissão de uma requisição POST,
+         * precisamos respeitar o padrão PRG: http://en.wikipedia.org/wiki/Post/Redirect/Get
+         * Este padrão diz que, a grosso modo: 
+         * Quando uma requisição é bem sucediada deve-se fazer um Redirect para a próxima página.
+         *
+         * Sendo assim, quando a postagem for gravada com sucesso, temos que
+         * efetuar um sendRedirec() para concluir o processo.
+         *
+         * Sabemos que ao usar o sendRedirect() não conseguimos enviar parâmetros internos para a página.
+         * Sendo assim, devemos enviar a mensagem de sucesso através da Sessão.
+         */
         try {
             Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
             Connection conn = (Connection) req.getAttribute("conexao");
@@ -47,11 +62,16 @@ public class TimelineServlet extends HttpServlet {
             postagem.setData(new Date());
             postagem.setUsuario(usuario);
             new PostagemDAO(conn).inserir(postagem);
+            resp.sendRedirect("/Facebug/Timeline");
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível salvar sua postagem.");
+            /*
+             * Aqui temos que chamar o doGet() em vez do requestDispatcher() diretamente.
+             * Para que as postagens sejam carregadas e enviadas de volta para a página.
+             */
+            doGet(req, resp);
         }
-        doGet(req, resp);
     }
 
 }

@@ -1,7 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
-    String mensagemSucesso = (String) request.getAttribute("mensagem_sucesso");
+    String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso"); // devido ao problema do PRG, nossa mensagem de sucesso deve trafegar na sessão
+    session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la
 %>
 <!DOCTYPE html>
 <html>

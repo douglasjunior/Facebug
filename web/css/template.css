@@ -26,10 +26,23 @@ body {
 .blank-line {
     clear: both;
 }
+.div-menu-conteudo {
+    margin: 0px auto;
+    width: 720px;
+    padding: 0px;
+    padding-right: 194px;
+}
+.div-conteudo {
+    width: 496px !important;
+}
+.div-menu {
+    width: 194px !important;
+}
 .postagem {
     background-color: white !important; 
     padding: 20px !important;
 }
+
 .postagem-profile-image {
     height: 50px !important;
     float: left;
