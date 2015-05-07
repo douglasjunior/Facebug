@@ -23,3 +23,24 @@ body {
     background-repeat: repeat-x;
     border-color: #000142;
 }
+.blank-line {
+    clear: both;
+}
+.postagem {
+    background-color: white !important; 
+    padding: 20px !important;
+}
+.postagem-profile-image {
+    height: 50px !important;
+    float: left;
+}
+.postagem-data {
+    float: right;
+}
+.postagem-nome {
+    margin: 0px !important;
+}
+.postagem-nome h4 {
+    margin: 0px !important;
+    margin-bottom: 10px !important;
+}

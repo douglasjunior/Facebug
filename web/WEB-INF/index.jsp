@@ -41,16 +41,23 @@
                             </div>
                         </form>
                     </div>
-                    <br style="clear: both" /><br style="clear: both" /><br style="clear: both" />
+                    <br class="blank-line" /><br class="blank-line" /><br class="blank-line" />
                     <% for (Postagem postagem : postagens) {%>
-                    <div class="span6" style="background-color: white; padding: 20px" >
-                        <img src="/Facebug/imagens/perfil-padrao.jpg" style="height: 50px !important" />
-                        <spam style="float: right"><%=postagem.getDataToString()%></spam>
-                        <h4><%= postagem.getUsuario().getNomeCompleto()%></h4>
-                        <%=postagem.getTexto()%>
+                    <div class="span6 postagem" >
+                        <div class="span2">
+                            <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
+                        </div>
+                        <div class="span10 postagem-nome"  >
+                            <h4><%= postagem.getUsuario().getNomeCompleto()%></h4>
+                            <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
+                        </div>
+                        <br class="blank-line" />
+                        <hr class="bs-docs-separator blank-line" /> 
+                        <div class="span12">
+                            <%=postagem.getTexto()%>
+                        </div>
                     </div>
-                    <br style="clear: both"/>
-                    <br style="clear: both"/>
+                    <br class="blank-line" /><br class="blank-line"/>
                     <% }%>
                 </div>
             </div>

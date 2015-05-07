@@ -45,7 +45,7 @@
                     <div class="span5" >
                         <form name="login" method="POST" action="Login" class="form-horizontal" style="float: right"  >
                             <h3 style="float: right">Faça o seu Login!</h3>
-                            <br style="clear: both" />
+                            <br class="blank-line" />
                             <input type="hidden" name="acao" value="login" />
                             <div class="control-group">
                                 <label class="control-label" for="loginEmail">E-mail</label>
@@ -76,7 +76,7 @@
                     <div class="span5" >
                         <form name="cadastro" method="POST" action="Login" class="form-horizontal" style="float: left" >
                             <h3 style="float: right">Faça o seu Cadastro!</h3>
-                            <br style="clear: both" />
+                            <br class="blank-line" />
                             <input type="hidden" name="acao" value="cadastro" />
                             <div class="control-group">
                                 <label class="control-label" for="cadNome">Nome</label>
