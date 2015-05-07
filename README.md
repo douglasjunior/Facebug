@@ -1,4 +1,4 @@
-## Rede social desenvolvida pelos alunos de Programação Web do curso de ADS da Faculdade Integrado
+## Rede social em desenvolvimento pelos alunos de Programação Web do curso de ADS da Faculdade Integrado
 
 1. Cadastro público de usuário *
 2. Login e senha *
@@ -12,3 +12,5 @@
 10. Compartilhar com outras redes
 
 Tecnologias: Java Web com banco de dados MySQL
+
+Demo: http://douglasjunior.tk:8080/Facebug
