@@ -71,4 +71,18 @@ public class UsuarioDAO {
         return usuario;
     }
 
+    Usuario consultaId(int id) throws SQLException {
+    Usuario usuario = null;
+        PreparedStatement ps = conn.prepareStatement(
+                "SELECT * FROM usuario WHERE id = ? ");
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            usuario = montaUsuario(rs);
+        }
+        rs.close();
+        ps.close();
+        return usuario;
+    }
+
 }

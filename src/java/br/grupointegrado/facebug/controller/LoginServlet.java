@@ -43,12 +43,12 @@ public class LoginServlet extends HttpServlet {
                 resp.sendRedirect("/Facebug/Timeline");
             } else {
                 req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível efetuar o login, tente novamente mais tarde.");
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         }
     }
 
@@ -62,7 +62,7 @@ public class LoginServlet extends HttpServlet {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível concluir o cadastro, tente novamente mais tarde.");
         }
-        req.getRequestDispatcher("/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
     }
 
     @Override

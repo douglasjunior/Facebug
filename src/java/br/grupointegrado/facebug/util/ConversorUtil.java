@@ -1,10 +1,12 @@
 package br.grupointegrado.facebug.util;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Classe útil para conversão de tipos
+ *
  * @author Douglas
  */
 public class ConversorUtil {
@@ -79,6 +81,23 @@ public class ConversorUtil {
     public static java.sql.Date dateParaSQLDate(Date date) {
         try {
             return new java.sql.Date(date.getTime());
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String dateTimeParaString(Date data) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
+            return format.format(data);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    public static Timestamp dateParaTimeStamp(Date data) {
+        try {
+            return new Timestamp(data.getTime());
         } catch (Exception ex) {
             return null;
         }

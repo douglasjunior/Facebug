@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <ul class="nav pull-left">
                 <li><img class="navbar-logo-image" src="/Facebug/imagens/facebug.png" title="Facebug" /></li>
-                <li><a class="brand" href="/Facebug/index.jsp">Facebug</a></li>
+                <li><a class="brand" href="/Facebug/index.jsp">Facebug - A rede anti-social</a></li>
             </ul>
             <div class="nav-collapse collapse">
                 <%-- Verifica se o usuário é diferente de Null, pois a barra de topo é exibida mesmo quando o usuário não está logado --%>
