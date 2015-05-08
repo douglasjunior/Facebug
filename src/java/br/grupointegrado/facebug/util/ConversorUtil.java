@@ -1,10 +1,12 @@
 package br.grupointegrado.facebug.util;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Classe útil para conversão de tipos
+ *
  * @author Douglas
  */
 public class ConversorUtil {
@@ -67,6 +69,13 @@ public class ConversorUtil {
         }
     }
 
+    /**
+     * Converte o tipo String "dd/MM/yyyy" para o tipo java.sql.Date. <br>
+     * O tipo Date garante que será gravado somente Data no banco de dados.
+     *
+     * @param data
+     * @return
+     */
     public static java.sql.Date stringParaSQLDate(String data) {
         try {
             Date date = stringParaDate(data);
@@ -76,9 +85,45 @@ public class ConversorUtil {
         }
     }
 
-    public static java.sql.Date dateParaSQLDate(Date date) {
+    /**
+     * Converte o tipo java.util.Date para o tipo java.sql.Date. <br>
+     * O tipo Date garante que será gravado somente Data no banco de dados.
+     *
+     * @param data
+     * @return
+     */
+    public static java.sql.Date dateParaSQLDate(Date data) {
         try {
-            return new java.sql.Date(date.getTime());
+            return new java.sql.Date(data.getTime());
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * Converte o tipo java.util.Date para String no formato "dd/MM/yy HH:mm"
+     * @param data
+     * @return 
+     */
+    public static String dateTimeParaString(Date data) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
+            return format.format(data);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    /**
+     * Converte o tipo java.util.Date para o tipo java.sql.Timestamp. <br>
+     * O tipo Timestamp garante que será gravado Data e Hora no banco de dados.
+     *
+     * @param data
+     * @return
+     */
+    public static Timestamp dateParaTimeStamp(Date data) {
+        try {
+            return new Timestamp(data.getTime());
         } catch (Exception ex) {
             return null;
         }

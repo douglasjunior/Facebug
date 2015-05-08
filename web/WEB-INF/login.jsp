@@ -1,4 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String mensagemErro = (String) request.getAttribute("mensagem_erro");
+    String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso"); // devido ao problema do PRG, nossa mensagem de sucesso deve trafegar na sessão
+    session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,12 +30,23 @@
 
                 <!--  CONTEÚDO -->
                 <div class="span12" >
-
+                    <% if (mensagemSucesso != null) {%>
+                    <div class="alert alert-success">
+                        <%= mensagemSucesso%>
+                    </div>
+                    <%
+                        }
+                        if (mensagemErro != null) {
+                    %>
+                    <div class="alert alert-error">
+                        <%= mensagemErro%>
+                    </div>
+                    <%}%>
                     <!-- FORMULARIO DE LOGIN -->
                     <div class="span5" >
-                        <form name="login" method="POST" action="LoginServlet" class="form-horizontal" style="float: right"  >
+                        <form name="login" method="POST" action="Login" class="form-horizontal" style="float: right"  >
                             <h3 style="float: right">Faça o seu Login!</h3>
-                            <br style="clear: both" />
+                            <br class="blank-line" />
                             <input type="hidden" name="acao" value="login" />
                             <div class="control-group">
                                 <label class="control-label" for="loginEmail">E-mail</label>
@@ -51,7 +67,7 @@
                             </div>
                         </form>
                     </div>
-                    
+
                     <!-- COLUNA DO MEIO -->
                     <div class="span1" style="text-align: center">
                         <h3>Ou</h3>
@@ -59,9 +75,9 @@
 
                     <!-- FORMULARIO DE CADASTRO -->
                     <div class="span5" >
-                        <form name="cadastro" method="POST" action="LoginServlet" class="form-horizontal" style="float: left" >
+                        <form name="cadastro" method="POST" action="Login" class="form-horizontal" style="float: left" >
                             <h3 style="float: right">Faça o seu Cadastro!</h3>
-                            <br style="clear: both" />
+                            <br class="blank-line" />
                             <input type="hidden" name="acao" value="cadastro" />
                             <div class="control-group">
                                 <label class="control-label" for="cadNome">Nome</label>
