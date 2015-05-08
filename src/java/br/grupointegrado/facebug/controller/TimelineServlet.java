@@ -31,6 +31,7 @@ public class TimelineServlet extends HttpServlet {
          * Neste método devemos carregar todos os dados necessários para exibir na Timeline
          */
         try {
+            String nome;
             Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
             Connection conn = (Connection) req.getAttribute("conexao");
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
