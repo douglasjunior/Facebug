@@ -1,5 +1,6 @@
 package br.grupointegrado.facebug.model;
 
+import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.util.ConversorUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,12 +16,12 @@ public class PostagemDAO extends DAO {
      * @param req
      * @return
      */
-    public static Postagem getPostagemParameters(HttpServletRequest req) throws Exception {
+    public static Postagem getPostagemParameters(HttpServletRequest req) throws ValidacaoException {
         Postagem postagem = new Postagem();
         
         String texto = req.getParameter("texto");
         if (null == texto.trim())
-            throw new Exception("Você precisa escrever algo para publicar");
+            throw new ValidacaoException("Você precisa escrever algo para publicar");
         
         postagem.setTexto(texto);
         postagem.setPublica("on".equals(req.getParameter("publica")));

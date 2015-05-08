@@ -5,6 +5,7 @@
  */
 package br.grupointegrado.facebug.controller;
 
+import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.Usuario;
@@ -71,7 +72,7 @@ public class TimelineServlet extends HttpServlet {
              * Para que as postagens sejam carregadas e enviadas de volta para a página.
              */
             doGet(req, resp);
-        } catch (Exception ex) {
+        } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
             doGet(req, resp);
