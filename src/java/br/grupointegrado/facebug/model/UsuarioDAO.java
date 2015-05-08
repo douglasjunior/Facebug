@@ -1,5 +1,6 @@
 package br.grupointegrado.facebug.model;
 
+import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.util.ConversorUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,9 +38,10 @@ public class UsuarioDAO extends DAO {
      * @param usuario
      * @throws SQLException
      */
-    public void inserir(Usuario usuario) throws SQLException {
+    public void inserir(Usuario usuario) throws ValidacaoException {
         // Chamada do métoto genérico executaSQL(), basta passar os parâmetros na ordem correta
-        executaSQL("INSERT INTO usuario (nome, sobrenome, nascimento, apelido, foto, email,  senha) "
+        try {
+            executaSQL("INSERT INTO usuario (nome, sobrenome, nascimento, apelido, foto, email,  senha) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
                 usuario.getNome(),
                 usuario.getSobrenome(),
@@ -48,6 +50,9 @@ public class UsuarioDAO extends DAO {
                 usuario.getFoto(),
                 usuario.getEmail(),
                 usuario.getSenha());
+        } catch (SQLException ex) {
+            throw new ValidacaoException("Não foi possível concluir o cadastro, tente novamente mais tarde.");
+        }
     }
 
     /**
@@ -58,12 +63,20 @@ public class UsuarioDAO extends DAO {
      * @return
      * @throws SQLException
      */
-    public Usuario consultaEmailSenha(String email, String senha) throws SQLException {
-        // Utilizo o método genérico para fazer a consulta.
-        Object usuario = consultaUm("SELECT * FROM usuario WHERE email = ? AND senha = ? ", email, senha);
-        // Podemos fazer um cast de Object para Usuário sem problemas, 
-        // pois a implementação do nosso método montaObjeto() criou um objeto do tipo Usuário.
-        return (Usuario) usuario;
+    public Usuario consultaEmailSenha(String email, String senha) throws ValidacaoException {
+        try {
+            // Utilizo o método genérico para fazer a consulta.
+            Object usuario = consultaUm("SELECT * FROM usuario WHERE email = ? AND senha = ? ", email, senha);
+            
+            if (null == usuario)
+                throw new ValidacaoException("E-mail ou senha incorretos, tente novamente.");
+
+            // Podemos fazer um cast de Object para Usuário sem problemas, 
+            // pois a implementação do nosso método montaObjeto() criou um objeto do tipo Usuário.
+            return (Usuario) usuario;
+        } catch (SQLException ex) {
+            throw new ValidacaoException("Não foi possível efetuar o login, tente novamente mais tarde.");
+        }
     }
 
     /**

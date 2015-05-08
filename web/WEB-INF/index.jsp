@@ -7,6 +7,8 @@
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
     List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
     postagens = postagens != null ? postagens : new ArrayList<Postagem>();
+    
+    String mensagemErro = (String) request.getAttribute("mensagem_erro");
 %>
 <!DOCTYPE html>
 <html>
@@ -28,6 +30,11 @@
                     <!--  CONTEÚDO -->
                     <div class="div-conteudo span10">
                         <h3>Olá <%= usuarioLogado.getNome()%>, bem vindo ao Facebug!</h3><br />
+                        <% if (mensagemErro != null) { %>
+                        <div class="alert alert-error">
+                            <%= mensagemErro%>
+                        </div>
+                        <%}%>
                         <div class="span12" >
                             <form name="postagem" method="POST" action="Timeline" class="form-inline" >
 

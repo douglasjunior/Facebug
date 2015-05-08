@@ -5,6 +5,7 @@
  */
 package br.grupointegrado.facebug.controller;
 
+import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.Usuario;
@@ -63,13 +64,9 @@ public class TimelineServlet extends HttpServlet {
             postagem.setUsuario(usuario);
             new PostagemDAO(conn).inserir(postagem);
             resp.sendRedirect("/Facebug/Timeline");
-        } catch (SQLException ex) {
+        } catch (ValidacaoException ex) {
             ex.printStackTrace();
-            req.setAttribute("mensagem_erro", "Não foi possível salvar sua postagem.");
-            /*
-             * Aqui temos que chamar o doGet() em vez do requestDispatcher() diretamente.
-             * Para que as postagens sejam carregadas e enviadas de volta para a página.
-             */
+            req.setAttribute("mensagem_erro", ex.getMessage());
             doGet(req, resp);
         }
     }
