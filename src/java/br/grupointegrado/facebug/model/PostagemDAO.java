@@ -20,7 +20,8 @@ public class PostagemDAO extends DAO {
         Postagem postagem = new Postagem();
         
         String texto = req.getParameter("texto");
-        if (null == texto.trim())
+        System.out.println(texto);
+        if (texto.trim().equals(""))
             throw new ValidacaoException("Você precisa escrever algo para publicar");
         
         postagem.setTexto(texto);
@@ -38,13 +39,17 @@ public class PostagemDAO extends DAO {
      * @param postagem
      * @throws SQLException
      */
-    public void inserir(Postagem postagem) throws SQLException {
-        executaSQL("INSERT INTO postagem (texto, data, id_usuario, publica) "
+    public void inserir(Postagem postagem) throws ValidacaoException {
+        try {
+            executaSQL("INSERT INTO postagem (texto, data, id_usuario, publica) "
                 + "VALUES (?, ?, ?, ?) ",
                 postagem.getTexto(),
                 ConversorUtil.dateParaTimeStamp(postagem.getData()),
                 postagem.getUsuario().getId(),
                 postagem.isPublica());
+        } catch (SQLException ex) {
+            throw new ValidacaoException("Não foi possível salvar sua postagem.");
+        }
     }
 
     /**

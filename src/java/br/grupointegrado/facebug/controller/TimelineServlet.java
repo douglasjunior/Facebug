@@ -64,14 +64,6 @@ public class TimelineServlet extends HttpServlet {
             postagem.setUsuario(usuario);
             new PostagemDAO(conn).inserir(postagem);
             resp.sendRedirect("/Facebug/Timeline");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            req.setAttribute("mensagem_erro", "Não foi possível salvar sua postagem.");
-            /*
-             * Aqui temos que chamar o doGet() em vez do requestDispatcher() diretamente.
-             * Para que as postagens sejam carregadas e enviadas de volta para a página.
-             */
-            doGet(req, resp);
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
