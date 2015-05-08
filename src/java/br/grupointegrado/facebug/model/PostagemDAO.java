@@ -15,9 +15,14 @@ public class PostagemDAO extends DAO {
      * @param req
      * @return
      */
-    public static Postagem getPostagemParameters(HttpServletRequest req) {
+    public static Postagem getPostagemParameters(HttpServletRequest req) throws Exception {
         Postagem postagem = new Postagem();
-        postagem.setTexto(req.getParameter("texto"));
+        
+        String texto = req.getParameter("texto");
+        if (null == texto.trim())
+            throw new Exception("Você precisa escrever algo para publicar");
+        
+        postagem.setTexto(texto);
         postagem.setPublica("on".equals(req.getParameter("publica")));
         return postagem;
     }

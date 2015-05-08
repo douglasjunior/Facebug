@@ -71,6 +71,10 @@ public class TimelineServlet extends HttpServlet {
              * Para que as postagens sejam carregadas e enviadas de volta para a página.
              */
             doGet(req, resp);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            req.setAttribute("mensagem_erro", ex.getMessage());
+            doGet(req, resp);
         }
     }
 
