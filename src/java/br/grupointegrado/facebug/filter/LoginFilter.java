@@ -1,6 +1,7 @@
 package br.grupointegrado.facebug.filter;
 
 import br.grupointegrado.facebug.model.Usuario;
+import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -27,8 +28,11 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-
-        if (isArquivoRecurso(req) || isPaginaLogin(req) || estaLogado(req)) {
+        
+        if (isPaginaLogin(req) && estaLogado(req) && !estaSaindo(req)) {
+            System.out.println("Usuário já está logado");
+            resp.sendRedirect("/Facebug/Timeline");
+        } else if (isArquivoRecurso(req) || isPaginaLogin(req) || estaLogado(req)) {
             System.out.println("Liberou: " + req.getServletPath());
             chain.doFilter(request, response);
         } else {
@@ -43,6 +47,16 @@ public class LoginFilter implements Filter {
 
     @Override
     public void destroy() {
+    }
+    
+    private boolean estaSaindo(HttpServletRequest req) {
+        String acao = req.getParameter("acao");
+        
+        try {
+            return acao.equals("sair");
+        } catch (NullPointerException ex) {
+            return false;
+        }
     }
 
     /**
