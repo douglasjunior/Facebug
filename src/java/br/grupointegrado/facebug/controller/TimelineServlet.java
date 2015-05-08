@@ -28,14 +28,14 @@ public class TimelineServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
-        * Neste método devemos carregar todos os dados necessários para exibir na Timeline
-        */
+         * Neste método devemos carregar todos os dados necessários para exibir na Timeline
+         */
         try {
             Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
             Connection conn = (Connection) req.getAttribute("conexao");
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível carregar a timeline completamente, tente novamente mais tarde.");
         }
@@ -67,6 +67,10 @@ public class TimelineServlet extends HttpServlet {
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
+            doGet(req, resp);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            req.setAttribute("mensagem_erro", "Não foi possível inserir sua postagem, tente novamente mais tarde.");
             doGet(req, resp);
         }
     }

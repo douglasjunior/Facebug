@@ -2,6 +2,7 @@ package br.grupointegrado.facebug.model;
 
 import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.util.ConversorUtil;
+import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,13 +15,19 @@ public class UsuarioDAO extends DAO {
      *
      * @param req
      * @return
+     * @throws br.grupointegrado.facebug.exception.ValidacaoException
      */
-    public static Usuario getUsuarioParameters(HttpServletRequest req) {
+    public static Usuario getUsuarioParameters(HttpServletRequest req) throws ValidacaoException {
+        String email = req.getParameter("email");
+        if (!ValidacaoUtil.validaEmail(email)) {
+            throw new ValidacaoException("Informe um enedreço de e-mail válido.");
+        }
+
         Usuario usuario = new Usuario();
         usuario.setId(ConversorUtil.stringParaInteger(req.getParameter("id")));
         usuario.setNome(req.getParameter("nome"));
         usuario.setSobrenome(req.getParameter("sobrenome"));
-        usuario.setEmail(req.getParameter("email"));
+        usuario.setEmail(email);
         usuario.setSenha(req.getParameter("senha"));
         usuario.setNascimento(ConversorUtil.stringParaDate(req.getParameter("nascimento")));
         usuario.setApelido(req.getParameter("apelido"));
@@ -38,10 +45,9 @@ public class UsuarioDAO extends DAO {
      * @param usuario
      * @throws SQLException
      */
-    public void inserir(Usuario usuario) throws ValidacaoException {
+    public void inserir(Usuario usuario) throws SQLException {
         // Chamada do métoto genérico executaSQL(), basta passar os parâmetros na ordem correta
-        try {
-            executaSQL("INSERT INTO usuario (nome, sobrenome, nascimento, apelido, foto, email,  senha) "
+        executaSQL("INSERT INTO usuario (nome, sobrenome, nascimento, apelido, foto, email,  senha) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
                 usuario.getNome(),
                 usuario.getSobrenome(),
@@ -50,9 +56,6 @@ public class UsuarioDAO extends DAO {
                 usuario.getFoto(),
                 usuario.getEmail(),
                 usuario.getSenha());
-        } catch (SQLException ex) {
-            throw new ValidacaoException("Não foi possível concluir o cadastro, tente novamente mais tarde.");
-        }
     }
 
     /**
@@ -63,20 +66,12 @@ public class UsuarioDAO extends DAO {
      * @return
      * @throws SQLException
      */
-    public Usuario consultaEmailSenha(String email, String senha) throws ValidacaoException {
-        try {
-            // Utilizo o método genérico para fazer a consulta.
-            Object usuario = consultaUm("SELECT * FROM usuario WHERE email = ? AND senha = ? ", email, senha);
-            
-            if (null == usuario)
-                throw new ValidacaoException("E-mail ou senha incorretos, tente novamente.");
-
-            // Podemos fazer um cast de Object para Usuário sem problemas, 
-            // pois a implementação do nosso método montaObjeto() criou um objeto do tipo Usuário.
-            return (Usuario) usuario;
-        } catch (SQLException ex) {
-            throw new ValidacaoException("Não foi possível efetuar o login, tente novamente mais tarde.");
-        }
+    public Usuario consultaEmailSenha(String email, String senha) throws SQLException {
+        // Utilizo o método genérico para fazer a consulta.
+        Object usuario = consultaUm("SELECT * FROM usuario WHERE email = ? AND senha = ? ", email, senha);
+        // Podemos fazer um cast de Object para Usuário sem problemas, 
+        // pois a implementação do nosso método montaObjeto() criou um objeto do tipo Usuário.
+        return (Usuario) usuario;
     }
 
     /**

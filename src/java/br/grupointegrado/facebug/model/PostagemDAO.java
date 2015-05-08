@@ -1,5 +1,6 @@
 package br.grupointegrado.facebug.model;
 
+import br.grupointegrado.facebug.util.ValidacaoUtil;
 import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.util.ConversorUtil;
 import java.sql.Connection;
@@ -20,9 +21,9 @@ public class PostagemDAO extends DAO {
         Postagem postagem = new Postagem();
         
         String texto = req.getParameter("texto");
-        System.out.println(texto);
-        if (texto.trim().equals(""))
-            throw new ValidacaoException("Você precisa escrever algo para publicar");
+        if (!ValidacaoUtil.validaString(texto, 1)) {
+            throw new ValidacaoException("Você precisa escrever algo para publicar uma postagem.");
+        }
         
         postagem.setTexto(texto);
         postagem.setPublica("on".equals(req.getParameter("publica")));
@@ -39,17 +40,13 @@ public class PostagemDAO extends DAO {
      * @param postagem
      * @throws SQLException
      */
-    public void inserir(Postagem postagem) throws ValidacaoException {
-        try {
-            executaSQL("INSERT INTO postagem (texto, data, id_usuario, publica) "
+    public void inserir(Postagem postagem) throws SQLException {
+        executaSQL("INSERT INTO postagem (texto, data, id_usuario, publica) "
                 + "VALUES (?, ?, ?, ?) ",
                 postagem.getTexto(),
                 ConversorUtil.dateParaTimeStamp(postagem.getData()),
                 postagem.getUsuario().getId(),
                 postagem.isPublica());
-        } catch (SQLException ex) {
-            throw new ValidacaoException("Não foi possível salvar sua postagem.");
-        }
     }
 
     /**
