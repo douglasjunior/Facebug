@@ -25,6 +25,10 @@ public class ValidacaoUtil {
     public static boolean validaString(String string, int tamanhoMinimo) {
         return string != null && string.trim().length() >= tamanhoMinimo;
     }
+    
+    public static boolean validaValorString(String string, String valor) {
+        return null != string && string.equals(valor);
+    }
 
     /**
      * Faz a validação do e-mail utilizando expressão regular. <br>
