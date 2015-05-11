@@ -33,6 +33,18 @@ public class PostagemDAO extends DAO {
     public PostagemDAO(Connection conn) {
         super(conn);
     }
+    
+    public Postagem selecionarParaEdicao(Integer codigo, Usuario usuario) throws SQLException {
+        Postagem postagem = (Postagem) consultaUm("SELECT * FROM postagem WHERE id = ? AND id_usuario = ? ORDER BY id DESC", codigo, usuario.getId());
+        return postagem;
+    }
+    
+    public void alterar(Postagem postagem) throws SQLException {
+        executaSQL("UPDATE postagem SET texto = ?, publica = ? WHERE id = ?",
+                postagem.getTexto(),
+                postagem.isPublica(),
+                postagem.getId());
+    }
 
     /**
      * Insere uma nova postagem no banco de dados.
@@ -84,6 +96,10 @@ public class PostagemDAO extends DAO {
         postagem.setData(rs.getTimestamp("data"));
         postagem.setPublica(rs.getBoolean("publica"));
         return postagem;
+    }
+
+    public void excluir(int id) throws SQLException {
+        executaSQL("DELETE FROM postagem WHERE id = ?", id);
     }
 
 }

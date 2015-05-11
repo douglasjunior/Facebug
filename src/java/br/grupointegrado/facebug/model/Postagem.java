@@ -11,6 +11,10 @@ public class Postagem {
     private Usuario usuario;
     private boolean publica;
     
+    public Postagem() {
+        texto = "";
+    }
+    
     public int getId() {
         return id;
     }
@@ -75,6 +79,15 @@ public class Postagem {
             return false;
         }
         return true;
+    }
+    
+    public String getStringCompartilhado() {
+        return isPublica() ? "Público" : "Amigos";
+    }
+
+    @Override
+    public String toString() {
+        return this.getTexto();
     }
 
 }
