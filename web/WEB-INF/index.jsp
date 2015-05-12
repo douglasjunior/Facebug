@@ -5,16 +5,29 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
+
     List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
     postagens = postagens != null ? postagens : new ArrayList<Postagem>();
-    
+
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
+
+    Postagem postagemEditar = (Postagem) request.getAttribute("postagem");
+    postagemEditar = postagemEditar != null ? postagemEditar : new Postagem();
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Timeline</title>
+        <script type="text/javascript">
+            // verifica se o usuário tem certeza da exclusão
+            function excluirPostagem(codigo) {
+                var result = confirm("Deseja excluir a postagem " + codigo + " ?");
+                if (result) {
+                    window.location = "Timeline?acao=excluir&id=" + codigo;
+                }
+            }
+        </script>
     </head>
     <body>
         <%@include file="/WEB-INF/includes/topo.jsp" %>
@@ -30,15 +43,19 @@
                     <!--  CONTEÚDO -->
                     <div class="div-conteudo span10">
                         <h3>Olá <%= usuarioLogado.getNome()%>, bem vindo ao Facebug!</h3><br />
-                        <% if (mensagemErro != null) { %>
+                        <% if (mensagemErro != null) {%>
                         <div class="alert alert-error">
                             <%= mensagemErro%>
                         </div>
                         <%}%>
                         <div class="span12" >
                             <form name="postagem" method="POST" action="Timeline" class="form-inline" >
-
-                                <textarea name="texto" rows="3" style="resize: none; width: 483px" placeholder="O que você não está pensando?" ></textarea> 
+                                <% if (postagemEditar.getId() > 0) {
+                                        out.write("Editando postagem " + postagemEditar.getId());
+                                    }
+                                %> 
+                                <input type="hidden" name="id" value="<%= postagemEditar.getId()%>" />
+                                <textarea name="texto" rows="3" style="resize: none; width: 483px" placeholder="O que você não está pensando?" ><%=postagemEditar.getTexto()%></textarea> 
                                 <div style="float: right">
                                     <label class="checkbox">
                                         <input type="checkbox" name="publica"> Público
@@ -54,6 +71,13 @@
                                 <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
                             </div>
                             <div class="span10 postagem-nome"  >
+                                <div class="btn-group" style="float: right">
+                                    <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="Timeline?acao=editar&id=<%=postagem.getId()%>">Editar</a></li>
+                                        <li><a onclick="excluirPostagem(<%=postagem.getId()%>)">Excluir</a></li>
+                                    </ul>
+                                </div>
                                 <h4><%= postagem.getUsuario().getNomeCompleto()%></h4>
                                 <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
                             </div>

@@ -19,12 +19,12 @@ public class PostagemDAO extends DAO {
      */
     public static Postagem getPostagemParameters(HttpServletRequest req) throws ValidacaoException {
         Postagem postagem = new Postagem();
-        
+
         String texto = req.getParameter("texto");
         if (!ValidacaoUtil.validaString(texto, 1)) {
             throw new ValidacaoException("Você precisa escrever algo para publicar uma postagem.");
         }
-        
+
         postagem.setTexto(texto);
         postagem.setPublica("on".equals(req.getParameter("publica")));
         return postagem;
@@ -86,4 +86,16 @@ public class PostagemDAO extends DAO {
         return postagem;
     }
 
+    /**
+     * Consulta uma postagem pelo ID
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public Postagem consultaId(String id) throws SQLException {
+        // Chama o método genérico consultaUm()
+        Postagem postagem = (Postagem) consultaUm("SELECT * FROM postagem WHERE id = ?", id);
+        return postagem;
+    }
 }

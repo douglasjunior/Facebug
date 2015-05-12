@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.grupointegrado.facebug.controller;
 
 import br.grupointegrado.facebug.exception.ValidacaoException;
@@ -25,14 +20,27 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TimelineServlet extends HttpServlet {
 
+    /**
+     * Neste método devemos carregar todos os dados necessários para exibir na
+     * Timeline
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /*
-         * Neste método devemos carregar todos os dados necessários para exibir na Timeline
-         */
+
         try {
-            Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+            String acaoParam = req.getParameter("acao");
+            if ("excluir".equals(acaoParam)) {
+                doGetExcuir(req, resp);
+            } else if ("editar".equals(acaoParam)) {
+                doGetEditar(req, resp);
+            }
             Connection conn = (Connection) req.getAttribute("conexao");
+            Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
         } catch (SQLException ex) {
@@ -42,20 +50,54 @@ public class TimelineServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/index.jsp").forward(req, resp);
     }
 
+    /**
+     * Recebe a requisição GET e exclui a postagem do banco de dados.
+     *
+     * @param req
+     * @param resp
+     */
+    private void doGetExcuir(HttpServletRequest req, HttpServletResponse resp) {
+        String idParam = req.getParameter("id");
+        Connection conn = (Connection) req.getAttribute("conexao");
+        // implementar
+    }
+
+    /**
+     * Recebe a requisição GET, carrega a postagem para edição e envia para a
+     * página
+     *
+     * @param req
+     * @param resp
+     * @throws SQLException
+     */
+    private void doGetEditar(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+        String idParam = req.getParameter("id");
+        Connection conn = (Connection) req.getAttribute("conexao");
+        Postagem postagem = new PostagemDAO(conn).consultaId(idParam);
+        req.setAttribute("postagem", postagem);
+    }
+
+    /**
+     * Para evitar duplicidade na subimissão de uma requisição POST, precisamos
+     * respeitar o padrão PRG: http://en.wikipedia.org/wiki/Post/Redirect/Get
+     * <br />
+     * Este padrão diz que, a grosso modo: Quando uma requisição é bem sucediada
+     * deve-se fazer um Redirect para a próxima página.
+     *
+     * Sendo assim, quando a postagem for gravada com sucesso, temos que efetuar
+     * um sendRedirec() para concluir o processo.
+     *
+     * Sabemos que ao usar o sendRedirect() não conseguimos enviar parâmetros
+     * internos para a página. Sendo assim, devemos enviar a mensagem de sucesso
+     * através da Sessão.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /*
-         * Para evitar duplicidade na subimissão de uma requisição POST,
-         * precisamos respeitar o padrão PRG: http://en.wikipedia.org/wiki/Post/Redirect/Get
-         * Este padrão diz que, a grosso modo: 
-         * Quando uma requisição é bem sucediada deve-se fazer um Redirect para a próxima página.
-         *
-         * Sendo assim, quando a postagem for gravada com sucesso, temos que
-         * efetuar um sendRedirec() para concluir o processo.
-         *
-         * Sabemos que ao usar o sendRedirect() não conseguimos enviar parâmetros internos para a página.
-         * Sendo assim, devemos enviar a mensagem de sucesso através da Sessão.
-         */
         try {
             Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
             Connection conn = (Connection) req.getAttribute("conexao");

@@ -11,6 +11,14 @@ public class Postagem {
     private Usuario usuario;
     private boolean publica;
     
+    public Postagem(){
+        id = 0;
+        texto = "";
+        data = null;
+        usuario = null;
+        publica = false;
+    }
+    
     public int getId() {
         return id;
     }
