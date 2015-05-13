@@ -10,6 +10,8 @@
     postagens = postagens != null ? postagens : new ArrayList<Postagem>();
 
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
+    String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
+    session.removeAttribute("mensagem_sucesso");
 
     Postagem postagemEditar = (Postagem) request.getAttribute("postagem");
     postagemEditar = postagemEditar != null ? postagemEditar : new Postagem();
@@ -48,6 +50,11 @@
                             <%= mensagemErro%>
                         </div>
                         <%}%>
+                        <% if (mensagemSucesso != null) {%>
+                        <div class="alert alert-success">
+                            <%= mensagemSucesso%>
+                        </div>
+                        <%}%>
                         <div class="span12" >
                             <form name="postagem" method="POST" action="Timeline" class="form-inline" >
                                 <% if (postagemEditar.getId() > 0) {
@@ -58,7 +65,7 @@
                                 <textarea name="texto" rows="3" style="resize: none; width: 483px" placeholder="O que você não está pensando?" ><%=postagemEditar.getTexto()%></textarea> 
                                 <div style="float: right">
                                     <label class="checkbox">
-                                        <input type="checkbox" name="publica"> Público
+                                        <input type="checkbox" name="publica" <%= postagemEditar.isPublica() ? "checked" : ""%> /> Público
                                     </label>
                                     <input type="submit" value="Postar" class="btn btn-primary" />
                                 </div>

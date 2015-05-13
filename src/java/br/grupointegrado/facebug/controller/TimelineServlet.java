@@ -4,6 +4,8 @@ import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.Usuario;
+import br.grupointegrado.facebug.util.ConversorUtil;
+import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -56,10 +58,21 @@ public class TimelineServlet extends HttpServlet {
      * @param req
      * @param resp
      */
-    private void doGetExcuir(HttpServletRequest req, HttpServletResponse resp) {
+    private void doGetExcuir(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
         String idParam = req.getParameter("id");
         Connection conn = (Connection) req.getAttribute("conexao");
-        // implementar
+        Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+        PostagemDAO dao = new PostagemDAO(conn);
+        Postagem postagem = dao.consultaId(idParam);
+        /*
+         * Verifica se a postagem a ser alterada é do usuário que está alterando
+         */
+        if (!postagem.getUsuario().equals(usuario)) {
+            req.setAttribute("mensagem_erro", "Você não tem permissão para excluir esta postagem.");
+        } else {
+            dao.excluir(postagem);
+            req.getSession().setAttribute("mensagem_sucesso", "Postagem excluida com sucesso!");
+        }
     }
 
     /**
@@ -72,9 +85,17 @@ public class TimelineServlet extends HttpServlet {
      */
     private void doGetEditar(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
         String idParam = req.getParameter("id");
+        Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
         Connection conn = (Connection) req.getAttribute("conexao");
         Postagem postagem = new PostagemDAO(conn).consultaId(idParam);
-        req.setAttribute("postagem", postagem);
+        /*
+         * Verifica se a postagem a ser alterada é do usuário que está alterando
+         */
+        if (!postagem.getUsuario().equals(usuario)) {
+            req.setAttribute("mensagem_erro", "Você não tem permissão para editar esta postagem.");
+        } else {
+            req.setAttribute("postagem", postagem);
+        }
     }
 
     /**
@@ -99,12 +120,15 @@ public class TimelineServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
-            Connection conn = (Connection) req.getAttribute("conexao");
-            Postagem postagem = PostagemDAO.getPostagemParameters(req);
-            postagem.setData(new Date());
-            postagem.setUsuario(usuario);
-            new PostagemDAO(conn).inserir(postagem);
+            /*
+             Recupera o parâmetro vindo do formulário e verifica se é uma inserção ou edição
+             */
+            int idParam = ConversorUtil.stringParaInteger(req.getParameter("id"));
+            if (idParam > 0) {
+                doPostEditar(req, resp);
+            } else {
+                doPostInserir(req, resp);
+            }
             resp.sendRedirect("/Facebug/Timeline");
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
@@ -115,6 +139,38 @@ public class TimelineServlet extends HttpServlet {
             req.setAttribute("mensagem_erro", "Não foi possível inserir sua postagem, tente novamente mais tarde.");
             doGet(req, resp);
         }
+    }
+
+    private void doPostInserir(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ValidacaoException {
+        Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+        Connection conn = (Connection) req.getAttribute("conexao");
+        Postagem postagem = PostagemDAO.getPostagemParameters(req);
+        postagem.setData(new Date());
+        postagem.setUsuario(usuario);
+        new PostagemDAO(conn).inserir(postagem);
+    }
+
+    private void doPostEditar(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ValidacaoException {
+        Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+        Connection conn = (Connection) req.getAttribute("conexao");
+        PostagemDAO dao = new PostagemDAO(conn);
+        String idParam = req.getParameter("id");
+        String textoParam = req.getParameter("texto");
+        boolean publica = "on".equals(req.getParameter("publica"));
+        if (!ValidacaoUtil.validaString(textoParam, 1)) {
+            throw new ValidacaoException("Você precisa escrever algo para publicar uma postagem.");
+        }
+        Postagem postagem = dao.consultaId(idParam);
+        /*
+         * Verifica se a postagem a ser alterada é do usuário que está alterando
+         */
+        if (!postagem.getUsuario().equals(usuario)) {
+            throw new ValidacaoException("Você não tem permissão para editar esta postagem.");
+        }
+        postagem.setTexto(textoParam);
+        postagem.setPublica(publica);
+        dao.editar(postagem);
+        req.getSession().setAttribute("mensagem_sucesso", "Postagem editada com sucesso!");
     }
 
 }

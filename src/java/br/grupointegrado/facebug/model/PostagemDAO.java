@@ -98,4 +98,26 @@ public class PostagemDAO extends DAO {
         Postagem postagem = (Postagem) consultaUm("SELECT * FROM postagem WHERE id = ?", id);
         return postagem;
     }
+
+    /**
+     * Edita todos os campos de uma postagem no banco de dados.
+     *
+     * @param postagem
+     * @throws SQLException
+     */
+    public void editar(Postagem postagem) throws SQLException {
+        executaSQL("UPDATE postagem SET texto = ?, data = ?, id_usuario = ?, publica = ? "
+                + "WHERE id = ? ",
+                postagem.getTexto(),
+                ConversorUtil.dateParaTimeStamp(postagem.getData()),
+                postagem.getUsuario().getId(),
+                postagem.isPublica(),
+                // não esquecer de setar o ID no Where
+                postagem.getId());
+    }
+
+    public void excluir(Postagem postagem) throws SQLException {
+        executaSQL("DELETE FROM postagem WHERE id = ? ",
+                postagem.getId());
+    }
 }
