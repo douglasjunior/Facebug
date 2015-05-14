@@ -55,7 +55,7 @@
                             <%= mensagemSucesso%>
                         </div>
                         <%}%>
-                        <div class="span12" >
+                        <div class="span12 postagem-form" >
                             <form name="postagem" method="POST" action="Timeline" class="form-inline" >
                                 <% if (postagemEditar.getId() > 0) {
                                         out.write("Editando postagem " + postagemEditar.getId());
