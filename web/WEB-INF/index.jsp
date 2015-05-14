@@ -11,10 +11,10 @@
 
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
-    session.removeAttribute("mensagem_sucesso");
+    session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
 
     Postagem postagemEditar = (Postagem) request.getAttribute("postagem");
-    postagemEditar = postagemEditar != null ? postagemEditar : new Postagem();
+    postagemEditar = postagemEditar != null ? postagemEditar : new Postagem(); // evita que uma postagem NULL chegue ao formulário
 %>
 <!DOCTYPE html>
 <html>

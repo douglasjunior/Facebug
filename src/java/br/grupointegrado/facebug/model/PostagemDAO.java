@@ -116,6 +116,12 @@ public class PostagemDAO extends DAO {
                 postagem.getId());
     }
 
+    /**
+     * Remove uma postagem do banco de dados
+     *
+     * @param postagem
+     * @throws SQLException
+     */
     public void excluir(Postagem postagem) throws SQLException {
         executaSQL("DELETE FROM postagem WHERE id = ? ",
                 postagem.getId());
