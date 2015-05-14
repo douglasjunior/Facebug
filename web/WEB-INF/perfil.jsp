@@ -18,8 +18,16 @@
                 <div class="div-menu-conteudo">
                     <div class="span12">
                         <!-- IMAGEM DO PERFIL -->
-                        <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=usuarioLogado.getNomeCompleto()%>"  /><br />
-                        <h4><%= usuarioLogado.getNomeCompleto()%> (<%= usuarioLogado.getApelido()%>)</h4>
+                        <div class="span2">
+                            <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=usuarioLogado.getNomeCompleto()%>"  />
+                        </div>
+                        <div class="span10">
+                            <h4><%= usuarioLogado.getNomeCompleto()%></h4>
+                            <% if (usuarioLogado.getApelido() != null) {%>
+                            <h5>(<%= usuarioLogado.getApelido()%>)</h5>
+                            <% }%>
+                        </div>
+                        <br class="blank-line" />
                         <!-- LISTA QUE REPRESENTA AS ABAS -->
                         <ul class="nav nav-pills" id="myTab" style="background-color: white">
                             <li class="active"><a href="#sobre">Sobre</a></li>
