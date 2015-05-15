@@ -1,3 +1,4 @@
+<%@page import="br.grupointegrado.facebug.util.HtmlUtil"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
@@ -19,12 +20,12 @@
                     <div class="span12">
                         <!-- IMAGEM DO PERFIL -->
                         <div class="span2">
-                            <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=usuarioLogado.getNomeCompleto()%>"  />
+                            <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=HtmlUtil.xss(usuarioLogado.getNomeCompleto())%>"  />
                         </div>
                         <div class="span10">
-                            <h4><%= usuarioLogado.getNomeCompleto()%></h4>
+                            <h4><%= HtmlUtil.xss(usuarioLogado.getNomeCompleto())%></h4>
                             <% if (usuarioLogado.getApelido() != null) {%>
-                            <h5>(<%= usuarioLogado.getApelido()%>)</h5>
+                            <h5>(<%= HtmlUtil.xss(usuarioLogado.getApelido())%>)</h5>
                             <% }%>
                         </div>
                         <br class="blank-line" />

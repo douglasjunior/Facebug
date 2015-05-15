@@ -1,3 +1,4 @@
+<%@page import="br.grupointegrado.facebug.util.HtmlUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="br.grupointegrado.facebug.model.Postagem"%>
@@ -44,7 +45,7 @@
                     </div>
                     <!--  CONTEÚDO -->
                     <div class="div-conteudo span10">
-                        <h3>Olá <%= usuarioLogado.getNome()%>, bem vindo ao Facebug!</h3><br />
+                        <h3>Olá <%= HtmlUtil.xss(usuarioLogado.getNome())%>, bem vindo ao Facebug!</h3><br />
                         <% if (mensagemErro != null) {%>
                         <div class="alert alert-error">
                             <%= mensagemErro%>
@@ -85,13 +86,13 @@
                                         <li><a onclick="excluirPostagem(<%=postagem.getId()%>)">Excluir</a></li>
                                     </ul>
                                 </div>
-                                <h4><%= postagem.getUsuario().getNomeCompleto()%></h4>
+                                        <h4><%= HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
                                 <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
                             </div>
                             <br class="blank-line" />
                             <hr class="bs-docs-separator blank-line" /> 
                             <div class="span12">
-                                <%=postagem.getTexto()%>
+                                <%=HtmlUtil.xss(postagem.getTexto())%>
                             </div>
                         </div>
                         <br class="blank-line" /><br class="blank-line"/>
