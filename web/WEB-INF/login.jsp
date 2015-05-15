@@ -2,7 +2,7 @@
 <%
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso"); // devido ao problema do PRG, nossa mensagem de sucesso deve trafegar na sessão
-    session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la
+    session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
 %>
 <!DOCTYPE html>
 <html>

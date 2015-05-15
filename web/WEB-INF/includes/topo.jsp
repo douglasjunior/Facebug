@@ -16,7 +16,10 @@
                 <% if (usuarioLogadoTopo != null) {%>
                 <ul class="nav pull-right">
                     <li><img class="navbar-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=usuarioLogadoTopo.getNomeCompleto()%>" /></li>
-                    <li><a href="#">Perfil</a></li>
+                    <li><a href="/Facebug/Perfil">Perfil</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="/Facebug/">Página inicial</a></li>
+                    <li class="divider-vertical"></li>
                     <li><a href="/Facebug/Login?acao=sair">Sair</a></li>
                 </ul>
                 <% }%>
