@@ -1,7 +1,11 @@
+<%@page import="java.util.List"%>
+<%@page import="br.grupointegrado.facebug.model.Postagem"%>
 <%@page import="br.grupointegrado.facebug.util.HtmlUtil"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
+    Usuario usuario = (Usuario) request.getAttribute("usuario");
+    List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
 %>
 <!DOCTYPE html>
 <html>
@@ -20,21 +24,28 @@
                     <div class="span12">
                         <!-- IMAGEM DO PERFIL -->
                         <div class="span2">
-                            <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=HtmlUtil.xss(usuarioLogado.getNomeCompleto())%>"  />
+                            <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=HtmlUtil.xss(usuario.getNomeCompleto())%>"  />
                         </div>
                         <div class="span10">
-                            <h4><%= HtmlUtil.xss(usuarioLogado.getNomeCompleto())%></h4>
-                            <% if (usuarioLogado.getApelido() != null) {%>
-                            <h5>(<%= HtmlUtil.xss(usuarioLogado.getApelido())%>)</h5>
+                            <h4><%= HtmlUtil.xss(usuario.getNomeCompleto())%></h4>
+                            <% if (usuario.getApelido() != null) {%>
+                            <h5>(<%= HtmlUtil.xss(usuario.getApelido())%>)</h5>
                             <% }%>
                         </div>
                         <br class="blank-line" />
+
                         <!-- LISTA QUE REPRESENTA AS ABAS -->
                         <ul class="nav nav-pills" id="myTab" style="background-color: white">
                             <li class="active"><a href="#sobre">Sobre</a></li>
                             <li><a href="#fotos">Fotos</a></li>
                             <li><a href="#amigos">Amigos</a></li>
+                                <%-- se o usuário logado está acessando o próprio perfil, então exibe a aba Perfil 
+                                    e não exibe o botão "Adicionar amigo" --%>
+                                <% if (usuarioLogado.equals(usuario)) { %>
                             <li><a href="#perfil">Perfil</a></li>
+                                <% } else { %>
+                            <li class="pull-right"><a href="#" class="btn btn-success">Adicionar amigo</a></li>
+                                <% } %>
                         </ul>
                         <div class="tab-content">
                             <!-- TAB SOBRE -->
@@ -50,24 +61,28 @@
                                     </ul>
                                 </div>
                                 <!--  DIV POSTAGENS -->
+
                                 <div class="div-conteudo span10">
                                     <!-- LISTA DE POSTAGENS -->
+                                    <% for (Postagem postagem : postagens) {%>
                                     <div class="span12 postagem" >
                                         <div class="span2">
                                             <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
                                         </div>
                                         <div class="span10 postagem-nome"  >
-                                            <h4>Usuário</h4>
-                                            <small class="muted">Compartilhado com amigos - 00/00/0000 00:00</small>
+                                            <h4><%= HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
+                                            <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
                                         </div>
                                         <br class="blank-line" />
                                         <hr class="bs-docs-separator blank-line" /> 
                                         <div class="span12">
-                                            Texto da postagem aqui.
+                                            <%=HtmlUtil.xss(postagem.getTexto())%>
                                         </div>
                                     </div>
                                     <br class="blank-line" /><br class="blank-line"/>
+                                    <% }%>
                                 </div>
+
                             </div>
                             <!-- TAB FOTOS -->
                             <div class="tab-pane" id="fotos">
@@ -77,10 +92,14 @@
                             <div class="tab-pane" id="amigos">
                                 Listar amigos aqui
                             </div>
+                            <%-- se o usuário logado está acessando o próprio perfil,
+                                então exibe o conteúdo da aba Perfil --%>
+                            <% if (usuarioLogado.equals(usuario)) {%>
                             <!-- TAB PERFIL -->
                             <div class="tab-pane" id="perfil">
                                 Aqui o usuário poderá editar o perfil
                             </div>
+                            <% }%>
                         </div>
                     </div>
                 </div>
