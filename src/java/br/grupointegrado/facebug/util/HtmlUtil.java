@@ -28,12 +28,10 @@ public class HtmlUtil {
                  } else if(caracter == '"') {
                     textoXSS.append("&quot;");
                  } else if(caracter == ' ') {
-                    textoXSS.append("&nbsp;");
+                    textoXSS.append("");
                  } else if (caracter == '\n'){
                     textoXSS.append("<br>");
-                 }else if (caracter == ' '){
-                    textoXSS.append("");
-                 }else {
+                 } else {
                     textoXSS.append(caracter);
                  }
            }
