@@ -28,7 +28,7 @@ public class HtmlUtil {
                  } else if(caracter == '"') {
                     textoXSS.append("&quot;");
                  } else if(caracter == ' ') {
-                    textoXSS.append("");
+                    textoXSS.append("&nbsp;");
                  } else if (caracter == '\n'){
                     textoXSS.append("<br>");
                  } else {
