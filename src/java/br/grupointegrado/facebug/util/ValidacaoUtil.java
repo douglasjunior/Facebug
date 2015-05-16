@@ -41,5 +41,5 @@ public class ValidacaoUtil {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
-    }
+    }   
 }
