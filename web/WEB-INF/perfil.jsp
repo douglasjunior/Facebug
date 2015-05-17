@@ -1,6 +1,13 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="br.grupointegrado.facebug.model.Postagem"%>
+<%@page import="br.grupointegrado.facebug.model.Postagem"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
+    
+    List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
+    postagens = postagens != null ? postagens : new ArrayList<Postagem>();
 %>
 <!DOCTYPE html>
 <html>
@@ -42,10 +49,10 @@
                                 <div class="div-menu span2">
                                     <ul class="nav nav-list" >
                                         <li class="nav-header">Sobre</li>
-                                        <li><strong>Nome: </strong>nome aqui</li>
-                                        <li><strong>Apelido: </strong>apelido aqui</li>
-                                        <li><strong>Email: </strong>email aqui</li>
-                                        <li><strong>Nascimento: </strong>nascimento aqui</li>
+                                        <li><strong>Nome: </strong><%=usuarioLogado.getNomeCompleto()%></li>
+                                        <li><strong>Apelido: </strong><%=usuarioLogado.getApelido()%></li>
+                                        <li><strong>Email: </strong><%=usuarioLogado.getEmail()%></li>
+                                        <li><strong>Nascimento: </strong><%=usuarioLogado.getNascimento()%></li>
                                     </ul>
                                 </div>
                                 <!--  DIV POSTAGENS -->
@@ -65,27 +72,23 @@
                                     </div>
                                     <!-- LISTA DE POSTAGENS -->
                                     <br class="blank-line" /><br class="blank-line" /><br class="blank-line" />
+                                    <% for (Postagem postagem : postagens) {%>
                                     <div class="span12 postagem" >
                                         <div class="span2">
                                             <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
                                         </div>
                                         <div class="span10 postagem-nome"  >
-                                            <div class="btn-group" style="float: right">
-                                                <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="Timeline?acao=editar&id=">Editar</a></li>
-                                                    <li><a onclick="excluirPostagem()">Excluir</a></li>
-                                                </ul>
-                                            </div>
-                                            <h4>Usuário</h4>
-                                            <small class="muted">Compartilhado com amigos - 00/00/0000 00:00</small>
+                                            <h4><%= postagem.getUsuario().getNomeCompleto()%></h4>
+                                            <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
                                         </div>
                                         <br class="blank-line" />
                                         <hr class="bs-docs-separator blank-line" /> 
                                         <div class="span12">
-                                            Texto da postagem aqui.
+                                            <%=postagem.getTexto()%>
                                         </div>
                                     </div>
+                                    <br class="blank-line" /><br class="blank-line"/>
+                                    <% }%>
                                     <br class="blank-line" /><br class="blank-line"/>
                                 </div>
                             </div>
@@ -111,14 +114,14 @@
 
         <script type="text/javascript">
             // código que seleciona a aba de acordo com a âncora contida na URL
-            $(function () {
+            $(function() {
                 var tabName = window.location.hash;
                 $('#myTab a[href="' + tabName + '"]').tab('show');
             });
         </script>
         <script type="text/javascript">
             // código que seleciona a aba quando clicada em cada uma delas
-            $('#myTab a').click(function (e) {
+            $('#myTab a').click(function(e) {
                 e.preventDefault();
                 $(this).tab('show');
                 window.location = this;
