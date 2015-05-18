@@ -3,6 +3,7 @@ package br.grupointegrado.facebug.controller;
 import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.model.Usuario;
 import br.grupointegrado.facebug.model.UsuarioDAO;
+import br.grupointegrado.facebug.util.CriptografiaUtil;
 import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.io.IOException;
 import java.sql.Connection;
@@ -44,7 +45,7 @@ public class LoginServlet extends HttpServlet {
                 throw new ValidacaoException("Informe um enedreço de e-mail válido.");
             }
             Connection conn = (Connection) req.getAttribute("conexao");
-            Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, senha);
+            Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, CriptografiaUtil.criptografarMD5(senha));
             if (usuario != null) {
                 HttpSession sessao = req.getSession();
                 sessao.setAttribute("usuario_logado", usuario);

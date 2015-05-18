@@ -2,6 +2,7 @@ package br.grupointegrado.facebug.model;
 
 import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.util.ConversorUtil;
+import br.grupointegrado.facebug.util.CriptografiaUtil;
 import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ public class UsuarioDAO extends DAO {
         usuario.setNome(req.getParameter("nome"));
         usuario.setSobrenome(req.getParameter("sobrenome"));
         usuario.setEmail(email);
-        usuario.setSenha(req.getParameter("senha"));
+        usuario.setSenha(CriptografiaUtil.criptografarMD5(req.getParameter("senha")));
         usuario.setNascimento(ConversorUtil.stringParaDate(req.getParameter("nascimento")));
         usuario.setApelido(req.getParameter("apelido"));
         usuario.setFoto(null);
