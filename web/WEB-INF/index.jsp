@@ -92,7 +92,7 @@
                             <br class="blank-line" />
                             <hr class="bs-docs-separator blank-line" /> 
                             <div class="span12">
-                                <%=HtmlUtil.xss(postagem.getTexto())%>
+                                <%=HtmlUtil.quebraLinha(postagem.getTexto())%>
                             </div>
                         </div>
                         <br class="blank-line" /><br class="blank-line"/>

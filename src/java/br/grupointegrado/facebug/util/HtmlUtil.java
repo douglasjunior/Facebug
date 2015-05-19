@@ -24,8 +24,6 @@ public class HtmlUtil {
                 textoXSS.append("&quot;");
             } else if (caracter == ' ') {
                 textoXSS.append("&nbsp;");
-            } else if (caracter == '\n') {
-                textoXSS.append("<br />");
             } else {
                 textoXSS.append(caracter);
             }
@@ -33,4 +31,11 @@ public class HtmlUtil {
         return textoXSS.toString();
     }
 
+    public static String quebraLinha(String texto) {
+        if (texto == null) {
+            return null;
+        }
+       return texto.replaceAll("\n", "<br />");
+       
+    }
 }
