@@ -45,21 +45,21 @@ public class LoginServlet extends HttpServlet {
             }
             Connection conn = (Connection) req.getAttribute("conexao");
             Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, senha);
-            if (usuario != null) {
-                HttpSession sessao = req.getSession();
-                sessao.setAttribute("usuario_logado", usuario);
-                resp.sendRedirect("/Facebug/Timeline");
-            } else {
-                if(tentativa < 3){
+            if(tentativa < 3){
+                if (usuario != null) {
+                    HttpSession sessao = req.getSession();
+                    sessao.setAttribute("usuario_logado", usuario);
+                    resp.sendRedirect("/Facebug/Timeline");
+                } else {
                     req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
                     tentativa = tentativa + 1;
                     req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
                 }
-                else{
-                    HttpSession sessao = req.getSession();
-                    sessao.setAttribute("usuario_invalido", "Sua sessão expirou. Você cometeu três acessos indevidos!");
-                    resp.sendRedirect("/Facebug/Login");
-                }
+            }
+            else{
+                HttpSession sessao = req.getSession();
+                sessao.setAttribute("usuario_invalido", "Sua sessão expirou. Você cometeu três acessos indevidos!");
+                resp.sendRedirect("/Facebug/Login");
             }
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
