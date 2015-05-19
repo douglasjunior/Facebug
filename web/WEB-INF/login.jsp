@@ -3,6 +3,7 @@
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso"); // devido ao problema do PRG, nossa mensagem de sucesso deve trafegar na sessão
     session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
+    String acessoNegado = (String) session.getAttribute("usuario_invalido");
 %>
 <!DOCTYPE html>
 <html>
@@ -41,7 +42,15 @@
                     <div class="alert alert-error">
                         <%= mensagemErro%>
                     </div>
-                    <%}%>
+                    <%}
+                        if(acessoNegado != null){
+                    %>
+                    <div class="alert alert-error">
+                        <%= acessoNegado%>
+                    </div>
+                    <% } %>
+                        
+
                     <!-- FORMULARIO DE LOGIN -->
                     <div class="span5" >
                         <form name="login" method="POST" action="Login" class="form-horizontal" style="float: right"  >
