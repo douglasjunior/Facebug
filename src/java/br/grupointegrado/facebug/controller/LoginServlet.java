@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
-
+    int tentativa = 0;
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
@@ -37,7 +38,6 @@ public class LoginServlet extends HttpServlet {
     private void efetuarLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
-
         try {
             // valida se foi informado um e-mail válido
             if (!ValidacaoUtil.validaEmail(email)) {
@@ -50,8 +50,16 @@ public class LoginServlet extends HttpServlet {
                 sessao.setAttribute("usuario_logado", usuario);
                 resp.sendRedirect("/Facebug/Timeline");
             } else {
-                req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
-                req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
+                if(tentativa < 3){
+                    req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
+                    tentativa = tentativa + 1;
+                    req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
+                }
+                else{
+                    HttpSession sessao = req.getSession();
+                    sessao.setAttribute("usuario_invalido", "Sua sessão expirou. Você cometeu três acessos indevidos!");
+                    resp.sendRedirect("/Facebug/Login");
+                }
             }
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
