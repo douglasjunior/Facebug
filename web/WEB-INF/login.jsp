@@ -3,13 +3,70 @@
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso"); // devido ao problema do PRG, nossa mensagem de sucesso deve trafegar na sessão
     session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
-    String acessoNegado = (String) session.getAttribute("usuario_invalido");
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Login</title>
+        <script type="text/javascript">
+            function validaTexto(texto) {
+                if (texto.length < 1) {
+                    return false;
+                }
+                return true;
+            }
+
+            function validaEmail(email) {
+                var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+                if (filtro.test(email)) {
+                    return true;
+                }
+                return false;
+            }
+
+            function validaSenha(senha) {
+                if (senha.length < 8) {
+                    return false;
+                }
+                return true;
+            }
+
+
+            function validarCadastro() {
+                var nome = document.cadastro.nome.value;
+                var sobrenome = document.cadastro.sobrenome.value;
+                var email = document.cadastro.email.value;
+                var senha = document.cadastro.senha.value;
+
+                if (!validaTexto(nome)) {
+                    alert("O campo Nome deve ter no mínimo 1 caractere.");
+                    document.cadastro.nome.focus();
+                    return false;
+                }
+                
+                if (!validaTexto(sobrenome)) {
+                    alert("O campo Sobrenome deve ter no mínimo 1 caractere.");
+                    document.cadastro.sobrenome.focus();
+                    return false;
+                }
+                
+                if (!validaEmail(email)) {
+                    alert("Digite um e-mail válido!");
+                    document.cadastro.email.focus();
+                    return false;
+                }
+                
+                if (!validaSenha(senha)) {
+                    alert("O campo Senha deve ter no mínimo 8 caracteres.");
+                    document.cadastro.senha.focus();
+                    return false;
+                }
+                
+                document.cadastro.submit();
+            }
+        </script>
         <style type="text/css">
             /*
             Código CSS para ajustar o tamanho dos formulários
@@ -42,9 +99,7 @@
                     <div class="alert alert-error">
                         <%= mensagemErro%>
                     </div>
-                    <% } %>
-                        
-
+                    <%}%>
                     <!-- FORMULARIO DE LOGIN -->
                     <div class="span5" >
                         <form name="login" method="POST" action="Login" class="form-horizontal" style="float: right"  >
@@ -108,7 +163,8 @@
                             </div>
                             <div class="control-group">
                                 <div class="controls">
-                                    <input type="submit" value="Cadastro" class="btn btn-primary" />
+                                    <!--<input type="submit" value="Cadastro" class="btn btn-primary" />-->
+                                    <input type="button" value="Cadastro" onclick="validarCadastro();" class="btn btn-primary" />
                                 </div>
                             </div>
                         </form>

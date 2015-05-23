@@ -63,7 +63,7 @@
                                     }
                                 %> 
                                 <input type="hidden" name="id" value="<%= postagemEditar.getId()%>" />
-                                <textarea name="texto" rows="3" style="resize: none; width: 483px" placeholder="O que você não está pensando?" ><%=postagemEditar.getTexto()%></textarea> 
+                                <textarea name="texto" rows="3" style="resize: none; width: 483px" placeholder="O que você não está pensando?" ><%=HtmlUtil.xss(postagemEditar.getTexto())%></textarea> 
                                 <div style="float: right">
                                     <label class="checkbox">
                                         <input type="checkbox" name="publica" <%= postagemEditar.isPublica() ? "checked" : ""%> /> Público

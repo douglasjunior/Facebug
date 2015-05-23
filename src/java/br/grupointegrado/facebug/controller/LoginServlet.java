@@ -3,6 +3,7 @@ package br.grupointegrado.facebug.controller;
 import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.model.Usuario;
 import br.grupointegrado.facebug.model.UsuarioDAO;
+import br.grupointegrado.facebug.util.CriptografiaUtil;
 import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
@@ -30,7 +31,7 @@ public class LoginServlet extends HttpServlet {
             /*
              Se nenhuma ação foi recebida, então só encaminha para a página principal
              */
-            resp.sendRedirect("/Facebug/Timeline");
+            resp.sendRedirect("/Facebug/");
         }
     }
 
@@ -40,8 +41,6 @@ public class LoginServlet extends HttpServlet {
         Integer tentativa = (Integer) req.getSession().getAttribute("tentativa_login");
         tentativa = tentativa != null ? tentativa : 1;
         
-        System.out.println("Tentativa: " + tentativa);
-
         try {
             // valida se foi informado um e-mail válido
             if (!ValidacaoUtil.validaEmail(email)) {
@@ -101,6 +100,23 @@ public class LoginServlet extends HttpServlet {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível efetuar o cadastro, tente novamente mais tarde.");
             req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
+        }
+    }
+
+    /**
+     * Recupera a página que po usuário tentou acessar antes de efetuar o Login.
+     *
+     * @param request
+     * @return
+     */
+    private String redirecionaPaginaLogar(HttpServletRequest request) {
+        String pagina = (String) request.getSession().getAttribute("pagina_redireciona");
+        request.getSession().removeAttribute("pagina_redireciona");
+        if (pagina != null) {
+            return "/Facebug" + pagina;
+        } else {
+            // não precisa especificar /Timeline, pois ela já está definida como página inicial no web.xml
+            return ("/Facebug/");
         }
     }
 
