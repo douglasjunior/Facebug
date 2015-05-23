@@ -31,7 +31,10 @@ public class LoginServlet extends HttpServlet {
             /*
              Se nenhuma ação foi recebida, então só encaminha para a página principal
              */
-            resp.sendRedirect("/Facebug/Timeline");
+            HttpSession sessao = req.getSession();
+            String pagina = redirecionaPaginaLogar(sessao);
+            resp.sendRedirect("/Facebug"+ pagina);
+
         }
     }
 
@@ -49,7 +52,10 @@ public class LoginServlet extends HttpServlet {
             if (usuario != null) {
                 HttpSession sessao = req.getSession();
                 sessao.setAttribute("usuario_logado", usuario);
-                resp.sendRedirect("/Facebug/Timeline");
+            String pagina = redirecionaPaginaLogar(sessao);
+            resp.sendRedirect("/Facebug"+ pagina);
+    
+
             } else {
                 req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
                 req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
@@ -92,7 +98,17 @@ public class LoginServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         }
     }
-
+    
+    private String redirecionaPaginaLogar(HttpSession sessao){
+        
+                String pagina = (String) sessao.getAttribute("pagina_redireciona");
+                if (pagina != null) {
+                 return (pagina);
+                } else {
+                 return ("/Timeline");
+                }
+    }
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
