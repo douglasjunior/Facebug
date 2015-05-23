@@ -31,10 +31,7 @@ public class LoginServlet extends HttpServlet {
             /*
              Se nenhuma ação foi recebida, então só encaminha para a página principal
              */
-            HttpSession sessao = req.getSession();
-            String pagina = redirecionaPaginaLogar(sessao);
-            resp.sendRedirect("/Facebug"+ pagina);
-
+            resp.sendRedirect("/Facebug/");
         }
     }
 
@@ -52,10 +49,7 @@ public class LoginServlet extends HttpServlet {
             if (usuario != null) {
                 HttpSession sessao = req.getSession();
                 sessao.setAttribute("usuario_logado", usuario);
-            String pagina = redirecionaPaginaLogar(sessao);
-            resp.sendRedirect("/Facebug"+ pagina);
-    
-
+                resp.sendRedirect(redirecionaPaginaLogar(req));
             } else {
                 req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
                 req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
@@ -98,17 +92,24 @@ public class LoginServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         }
     }
-    
-    private String redirecionaPaginaLogar(HttpSession sessao){
-        
-                String pagina = (String) sessao.getAttribute("pagina_redireciona");
-                if (pagina != null) {
-                 return (pagina);
-                } else {
-                 return ("/Timeline");
-                }
+
+    /**
+     * Recupera a página que po usuário tentou acessar antes de efetuar o Login.
+     *
+     * @param request
+     * @return
+     */
+    private String redirecionaPaginaLogar(HttpServletRequest request) {
+        String pagina = (String) request.getSession().getAttribute("pagina_redireciona");
+        request.getSession().removeAttribute("pagina_redireciona");
+        if (pagina != null) {
+            return "/Facebug" + pagina;
+        } else {
+            // não precisa especificar /Timeline, pois ela já está definida como página inicial no web.xml
+            return ("/Facebug/");
+        }
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*

@@ -32,9 +32,7 @@ public class LoginFilter implements Filter {
             System.out.println("Liberou: " + req.getServletPath());
             chain.doFilter(request, response);
         } else {
-            HttpSession sessao = req.getSession();
-            String servletPath = req.getServletPath();   
-            sessao.setAttribute("pagina_redireciona", servletPath);
+            salvarPaginaRedirecionada(req);
             System.out.println("Bloqueou: " + req.getServletPath());
             resp.sendRedirect("/Facebug/Login");
         }
@@ -92,6 +90,17 @@ public class LoginFilter implements Filter {
                 || servletPath.startsWith("/js/")
                 || servletPath.startsWith("/img/");
         return isArquivoRecurso;
+    }
+
+    /**
+     * Salva a página que o usuário tentou acessar para após efetuar o Login<br>
+     * então redirecioná-lo corretamente.
+     *
+     * @param req
+     */
+    private void salvarPaginaRedirecionada(HttpServletRequest req) {
+        String servletPath = req.getServletPath();
+        req.getSession().setAttribute("pagina_redireciona", servletPath);
     }
 
 }
