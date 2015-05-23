@@ -42,12 +42,6 @@
                     <div class="alert alert-error">
                         <%= mensagemErro%>
                     </div>
-                    <%}
-                        if(acessoNegado != null){
-                    %>
-                    <div class="alert alert-error">
-                        <%= acessoNegado%>
-                    </div>
                     <% } %>
                         
 
