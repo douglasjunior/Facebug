@@ -32,6 +32,9 @@ public class LoginFilter implements Filter {
             System.out.println("Liberou: " + req.getServletPath());
             chain.doFilter(request, response);
         } else {
+            HttpSession sessao = req.getSession();
+            String servletPath = req.getServletPath();   
+            sessao.setAttribute("pagina_redireciona", servletPath);
             System.out.println("Bloqueou: " + req.getServletPath());
             resp.sendRedirect("/Facebug/Login");
         }
