@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
-    int tentativa = 1;
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,6 +37,11 @@ public class LoginServlet extends HttpServlet {
     private void efetuarLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
+        Integer tentativa = (Integer) req.getSession().getAttribute("tentativa_login");
+        tentativa = tentativa != null ? tentativa : 1;
+        
+        System.out.println("Tentativa: " + tentativa);
+
         try {
             // valida se foi informado um e-mail válido
             if (!ValidacaoUtil.validaEmail(email)) {
@@ -45,21 +49,21 @@ public class LoginServlet extends HttpServlet {
             }
             Connection conn = (Connection) req.getAttribute("conexao");
             Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, senha);
-            if(tentativa < 3){
-                if (usuario != null) {
+            if (tentativa < 3) {
+                if(usuario != null){
                     HttpSession sessao = req.getSession();
                     sessao.setAttribute("usuario_logado", usuario);
                     resp.sendRedirect("/Facebug/Timeline");
-                } else {
-                    req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
-                    tentativa = tentativa + 1;
+                }
+                else{
+                    tentativa++;
+                    req.getSession().setAttribute("tentativa_login", tentativa);
+                    req.setAttribute("mensagem_erro", "Senha ou E-mail INVÁLIDOS");
                     req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
                 }
-            }
-            else{
-                HttpSession sessao = req.getSession();
-                sessao.setAttribute("usuario_invalido", "Sua sessão expirou. Você cometeu três acessos indevidos!");
-                resp.sendRedirect("/Facebug/Login");
+            } else {
+                req.setAttribute("mensagem_erro", "Sua sessão expirou. Você cometeu três acessos indevidos!");
+                req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
             }
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
