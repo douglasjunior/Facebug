@@ -38,20 +38,30 @@ public class LoginServlet extends HttpServlet {
     private void efetuarLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
-
+        Integer tentativa = (Integer) req.getSession().getAttribute("tentativa_login");
+        tentativa = tentativa != null ? tentativa : 1;
+        
         try {
             // valida se foi informado um e-mail válido
             if (!ValidacaoUtil.validaEmail(email)) {
                 throw new ValidacaoException("Informe um enedreço de e-mail válido.");
             }
             Connection conn = (Connection) req.getAttribute("conexao");
-            Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, CriptografiaUtil.criptografarMD5(senha));
-            if (usuario != null) {
-                HttpSession sessao = req.getSession();
-                sessao.setAttribute("usuario_logado", usuario);
-                resp.sendRedirect(redirecionaPaginaLogar(req));
+            Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, senha);
+            if (tentativa < 3) {
+                if(usuario != null){
+                    HttpSession sessao = req.getSession();
+                    sessao.setAttribute("usuario_logado", usuario);
+                    resp.sendRedirect("/Facebug/Timeline");
+                }
+                else{
+                    tentativa++;
+                    req.getSession().setAttribute("tentativa_login", tentativa);
+                    req.setAttribute("mensagem_erro", "Senha ou E-mail INVÁLIDOS");
+                    req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
+                }
             } else {
-                req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
+                req.setAttribute("mensagem_erro", "Sua sessão expirou. Você cometeu três acessos indevidos!");
                 req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
             }
         } catch (ValidacaoException ex) {
