@@ -39,25 +39,28 @@ public class LoginServlet extends HttpServlet {
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
         Integer tentativa = (Integer) req.getSession().getAttribute("tentativa_login");
-        tentativa = tentativa != null ? tentativa : 1;
-        
+        tentativa = tentativa != null ? tentativa : 0;
+
         try {
             // valida se foi informado um e-mail válido
             if (!ValidacaoUtil.validaEmail(email)) {
                 throw new ValidacaoException("Informe um enedreço de e-mail válido.");
             }
             Connection conn = (Connection) req.getAttribute("conexao");
-            Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, senha);
+            Usuario usuario = new UsuarioDAO(conn).consultaEmailSenha(email, CriptografiaUtil.criptografarMD5(senha));
+            // verifica se o usuário não excedeu o número de tentativas de login
             if (tentativa < 3) {
-                if(usuario != null){
+                if (usuario != null) {
                     HttpSession sessao = req.getSession();
+                    // se o Login passar, então zera as tentativas
+                    sessao.removeAttribute("tentativa_login");
                     sessao.setAttribute("usuario_logado", usuario);
-                    resp.sendRedirect("/Facebug/Timeline");
-                }
-                else{
+                    resp.sendRedirect(redirecionaPaginaLogar(req));
+                } else {
+                    // se o Login falhar, incrementa uma tentativa
                     tentativa++;
                     req.getSession().setAttribute("tentativa_login", tentativa);
-                    req.setAttribute("mensagem_erro", "Senha ou E-mail INVÁLIDOS");
+                    req.setAttribute("mensagem_erro", "E-mail ou senha incorretos, tente novamente.");
                     req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
                 }
             } else {
