@@ -1,11 +1,20 @@
 package br.grupointegrado.facebug.util;
 
 /**
+ * Classe útil responsável por tratamentos nas Strings que serão impressas no
+ * HTML.
  *
  * @author Felipe
  */
 public class HtmlUtil {
 
+    /**
+     * Faz a conversão dos caracteres reservados do HTML por seus respectivos
+     * códigos.
+     *
+     * @param texto
+     * @return
+     */
     public static String xss(String texto) {
         if (texto == null) {
             return null;
@@ -31,11 +40,17 @@ public class HtmlUtil {
         return textoXSS.toString();
     }
 
+    /**
+     * Substitui as quebras de linha \n por br
+     *
+     * @param texto
+     * @return
+     */
     public static String quebraLinha(String texto) {
         if (texto == null) {
             return null;
         }
-       return texto.replaceAll("\n", "<br />");
-       
+        // aqui devemos utilizar o repacle(), pois o replaceAll() é para expressão regular.
+        return texto.replace("\n", "<br />");
     }
 }
