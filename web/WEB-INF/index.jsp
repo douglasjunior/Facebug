@@ -68,6 +68,9 @@
                                     <label class="checkbox">
                                         <input type="checkbox" name="publica" <%= postagemEditar.isPublica() ? "checked" : ""%> /> Público
                                     </label>
+                                    <% if (postagemEditar.getId() > 0) { %>
+                                    <a href="/Facebug/Timeline" class="btn" >Cancelar</a>
+                                    <% } %> 
                                     <input type="submit" value="Postar" class="btn btn-primary" />
                                 </div>
                             </form>
@@ -86,7 +89,7 @@
                                         <li><a onclick="excluirPostagem(<%=postagem.getId()%>)">Excluir</a></li>
                                     </ul>
                                 </div>
-                                        <h4><%= HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
+                                <h4><%= HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
                                 <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
                             </div>
                             <br class="blank-line" />
