@@ -18,7 +18,15 @@
         <title>Facebug - Perfil</title>
         <script type="text/javascript">
             function validarPerfil() {
+                // implementar validação do formulário de perfil
                 return true;
+            }
+            function habilitarDesabilitaSenha() {
+                // método que habilita ou desabilita o campo de senha
+                if (document.perfil.habilitaSenha.checked)
+                    document.perfil.senha.removeAttribute('readonly');
+                else
+                    document.perfil.senha.setAttribute("readonly", "readonly");
             }
         </script>
     </head>
@@ -117,7 +125,7 @@
                             <div class="tab-pane" id="perfil">
                                 <!-- Devido ao fato deste formulário fazer upload de Imagens, é preciso adicionar os atributos < enctype="multipart/form-data" accept-charset="utf-8" > -->
                                 <form name="perfil" method="POST" action="Perfil" onsubmit="return validarPerfil();" enctype="multipart/form-data" accept-charset="utf-8" 
-                                      class="form-horizontal" >
+                                      class="form-horizontal" autocomplete="off" >
                                     <h3>Edição do perfil.</h3>
                                     <br class="blank-line" />
                                     <input type="hidden" name="acao" value="editar" />
@@ -162,7 +170,8 @@
                                     <div class="control-group">
                                         <label class="control-label" for="perfilSenha">Senha</label>
                                         <div class="controls">
-                                            <input type="password" id="perfilSenha" name="senha" value="" size="60" /> 
+                                            <input type="password" id="perfilSenha" name="senha" readonly autocomplete="off" size="60" /> 
+                                            <input type="checkbox" name="habilitaSenha" onchange="habilitarDesabilitaSenha();" />
                                         </div>
                                     </div>
                                     <div class="control-group">

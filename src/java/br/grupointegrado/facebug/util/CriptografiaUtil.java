@@ -18,6 +18,9 @@ public class CriptografiaUtil {
      * @return
      */
     public static String criptografarMD5(String original) {
+        if (original == null || original.isEmpty()) {
+            return null;
+        }
         // Cria a classe com o algorítmo de criptografia
         StringBuilder criptografado = new StringBuilder();
         try {

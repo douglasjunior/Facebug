@@ -49,6 +49,7 @@ public class UsuarioDAO extends DAO {
         Integer id = ConversorUtil.stringParaInteger((String) parametrosMultipart.get("id"));
         String email = (String) parametrosMultipart.get("email");
         byte[] foto = (byte[]) parametrosMultipart.get("foto");
+        String senha = (String) parametrosMultipart.get("senha");
         // valida o e-mail só quando o ID for igual a 0, ou seja, quando estiver inserindo
         if (id == 0 && !ValidacaoUtil.validaEmail(email)) {
             throw new ValidacaoException("Informe um enedreço de e-mail válido.");
@@ -58,10 +59,10 @@ public class UsuarioDAO extends DAO {
         usuario.setNome((String) parametrosMultipart.get("nome"));
         usuario.setSobrenome((String) parametrosMultipart.get("sobrenome"));
         usuario.setEmail(email);
-        usuario.setSenha(CriptografiaUtil.criptografarMD5((String) parametrosMultipart.get("senha")));
         usuario.setNascimento(ConversorUtil.stringParaDate((String) parametrosMultipart.get("nascimento")));
         usuario.setApelido((String) parametrosMultipart.get("apelido"));
         usuario.setFoto(foto);
+        usuario.setSenha(CriptografiaUtil.criptografarMD5(senha));
         return usuario;
     }
 
@@ -94,17 +95,27 @@ public class UsuarioDAO extends DAO {
      * @param usuario
      * @throws SQLException
      */
-    public void editar(Usuario usuario) throws SQLException {
+    public void editar(Usuario novoUsuario) throws SQLException {
+        Usuario usuarioAntigo = consultaId(novoUsuario.getId());
+        byte[] foto = consultaFoto(novoUsuario.getId());
+        // se o novo usuário está sem foto, então mantem a foto anterior
+        if (novoUsuario.getFoto() == null || novoUsuario.getFoto().length == 0) {
+            novoUsuario.setFoto(foto);
+        }
+        // se o novo usuário está sem senha, então mantem a senha anterior
+        if (novoUsuario.getSenha() == null || novoUsuario.getSenha().isEmpty()) {
+            novoUsuario.setSenha(usuarioAntigo.getSenha());
+        }
         executaSQL("UPDATE usuario SET nome = ?, sobrenome = ?, apelido = ?, foto = ?, nascimento = ?, senha = ?"
                 + "WHERE id = ? ",
-                usuario.getNome(),
-                usuario.getSobrenome(),
-                usuario.getApelido(),
-                usuario.getFoto(),
-                ConversorUtil.dateParaSQLDate(usuario.getNascimento()),
-                usuario.getSenha(),
+                novoUsuario.getNome(),
+                novoUsuario.getSobrenome(),
+                novoUsuario.getApelido(),
+                novoUsuario.getFoto(),
+                ConversorUtil.dateParaSQLDate(novoUsuario.getNascimento()),
+                novoUsuario.getSenha(),
                 // não esquecer de setar o ID no Where
-                usuario.getId());
+                novoUsuario.getId());
     }
 
     /**
