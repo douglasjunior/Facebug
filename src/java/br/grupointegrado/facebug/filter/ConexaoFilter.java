@@ -55,7 +55,7 @@ public class ConexaoFilter implements Filter {
     private Connection abrirConexao() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/facebugdb";
-        return DriverManager.getConnection(url, "root", "root");
+        return DriverManager.getConnection(url, "root", "xy234786");
     }
 
     /**
