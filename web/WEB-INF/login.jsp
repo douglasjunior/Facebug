@@ -9,7 +9,40 @@
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Login</title>
-        <script type="text/javascript" src="js/validaCampos.js"></script>
+        <script type="text/javascript">
+            function validarCadastro() {
+                var nome = document.cadastro.nome.value;
+                var sobrenome = document.cadastro.sobrenome.value;
+                var email = document.cadastro.email.value;
+                var senha = document.cadastro.senha.value;
+
+                if (!validaTexto(nome)) {
+                    alert("O campo Nome deve ter no mínimo 1 caractere.");
+                    document.cadastro.nome.focus();
+                    return false;
+                }
+
+                if (!validaTexto(sobrenome)) {
+                    alert("O campo Sobrenome deve ter no mínimo 1 caractere.");
+                    document.cadastro.sobrenome.focus();
+                    return false;
+                }
+
+                if (!validaEmail(email)) {
+                    alert("Digite um e-mail válido!");
+                    document.cadastro.email.focus();
+                    return false;
+                }
+
+                if (!validaSenha(senha)) {
+                    alert("O campo Senha deve ter no mínimo 8 caracteres.");
+                    document.cadastro.senha.focus();
+                    return false;
+                }
+                
+                return true;
+            }
+        </script>
         <style type="text/css">
             /*
             Código CSS para ajustar o tamanho dos formulários
@@ -76,7 +109,8 @@
 
                     <!-- FORMULARIO DE CADASTRO -->
                     <div class="span5" >
-                        <form name="cadastro" method="POST" action="Login" class="form-horizontal" style="float: left" >
+                        <form name="cadastro" method="POST" action="Login" onsubmit="return validarCadastro();"
+                              class="form-horizontal" style="float: left" >
                             <h3 style="float: right">Faça o seu Cadastro!</h3>
                             <br class="blank-line" />
                             <input type="hidden" name="acao" value="cadastro" />
@@ -106,8 +140,7 @@
                             </div>
                             <div class="control-group">
                                 <div class="controls">
-                                    <!--<input type="submit" value="Cadastro" class="btn btn-primary" />-->
-                                    <input type="button" value="Cadastro" onclick="validarCadastro();" class="btn btn-primary" />
+                                    <input type="submit" value="Cadastro" class="btn btn-primary" />
                                 </div>
                             </div>
                         </form>
