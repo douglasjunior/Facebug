@@ -45,19 +45,19 @@
                             <li><a href="#perfil">Perfil</a></li>
                                 <% } else { %>
                             <li class="pull-right"><a href="#" class="btn btn-success">Adicionar amigo</a></li>
-                                <% } %>
+                                <% }%>
                         </ul>
                         <div class="tab-content">
                             <!-- TAB SOBRE -->
                             <div class="tab-pane active" id="sobre">
                                 <!-- DIV SOBRE -->
-                                <div class="div-menu span2">
+                                <div class="div-menu span2" style="word-break: break-all">
                                     <ul class="nav nav-list" >
                                         <li class="nav-header">Sobre</li>
-                                        <li><strong>Nome: </strong>nome aqui</li>
-                                        <li><strong>Apelido: </strong>apelido aqui</li>
-                                        <li><strong>Email: </strong>email aqui</li>
-                                        <li><strong>Nascimento: </strong>nascimento aqui</li>
+                                        <li><strong>Nome: </strong><%=HtmlUtil.xss(usuario.getNomeCompleto())%></li>
+                                        <li><strong>Apelido: </strong><%=HtmlUtil.xss(usuario.getApelido())%></li>
+                                        <li><strong>Email: </strong><%=HtmlUtil.xss(usuario.getEmail())%></li>
+                                        <li><strong>Nascimento: </strong><%=HtmlUtil.xss(usuario.getNascimentoString())%></li>
                                     </ul>
                                 </div>
                                 <!--  DIV POSTAGENS -->

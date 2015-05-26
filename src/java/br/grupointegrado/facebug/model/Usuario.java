@@ -1,5 +1,6 @@
 package br.grupointegrado.facebug.model;
 
+import br.grupointegrado.facebug.util.ConversorUtil;
 import java.util.Date;
 
 public class Usuario {
@@ -18,6 +19,7 @@ public class Usuario {
         this.sobrenome = sobrenome;
         this.email = email;
         this.senha = senha;
+        this.apelido = "";
     }
 
     public Usuario() {
@@ -48,6 +50,10 @@ public class Usuario {
         this.sobrenome = sobrenome;
     }
 
+    public String getNascimentoString() {
+        return ConversorUtil.dateParaString(nascimento);
+    }
+    
     public Date getNascimento() {
         return nascimento;
     }
