@@ -1,22 +1,25 @@
 package br.grupointegrado.facebug.controller;
 
+import br.grupointegrado.facebug.exception.ValidacaoException;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Usuario;
 import br.grupointegrado.facebug.model.UsuarioDAO;
 import br.grupointegrado.facebug.util.ConversorUtil;
+import br.grupointegrado.facebug.util.ServletUtil;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 
 /**
+ * Servlet resposnábel pelas requisições da página de Perfil.
  *
  * @author Douglas
  */
@@ -57,4 +60,53 @@ public class PerfilServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/perfil.jsp").forward(req, resp);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            String acao = "";
+            // recupera os parâmetros de requisição multipart
+            Map<String, Object> parametrosMultipart = ServletUtil.recuperaParametrosMultipart(req);
+            // se os parâmetros não forem NULL, então se trata de uma requisição multipart
+            if (parametrosMultipart != null) {
+                acao = (String) parametrosMultipart.get("acao");
+            } else {
+                // se a requisição não é multipart, então os parâmetros são recuperados normalmente
+                acao = req.getParameter("acao");
+            }
+            
+            // verifica qual é a ação recebida
+            if ("editar".equals(acao)) {
+                doPostEditarPerfil(req, parametrosMultipart);
+                resp.sendRedirect("/Facebug/Perfil#perfil");
+            }
+            
+        } catch (ValidacaoException ex) {
+            ex.printStackTrace();
+            req.setAttribute("mensagem_erro", ex.getMessage());
+            doGet(req, resp);
+        } catch (FileUploadException ex) {
+            ex.printStackTrace();
+            req.setAttribute("mensagem_erro", "Não foi possível realizar o upload do arquivo, verifique se o arquivo está correto.");
+            doGet(req, resp);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            req.setAttribute("mensagem_erro", "Ocorreu um erro inesperado, tente novamente mais tarde.");
+            doGet(req, resp);
+        }
+    }
+
+    private void doPostEditarPerfil(HttpServletRequest req, Map<String, Object> parametrosMultipart) throws ServletException, IOException, ValidacaoException, FileUploadException, Exception {
+        Usuario usuario = UsuarioDAO.getUsuarioParameters(parametrosMultipart);
+
+        Connection conn = (Connection) req.getAttribute("conexao");
+
+        UsuarioDAO dao = new UsuarioDAO(conn);
+
+        dao.editar(usuario);
+
+        // substitui o usuário logado na sessão com os dados atualizados
+        req.getSession().setAttribute("usuario_logado", dao.consultaId(usuario.getId()));
+        
+        req.getSession().setAttribute("mensagem_sucesso", "Os dados do usuário foram atualizados com sucesso.");
+    }
 }

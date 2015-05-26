@@ -5,8 +5,12 @@ import br.grupointegrado.facebug.util.ConversorUtil;
 import br.grupointegrado.facebug.util.CriptografiaUtil;
 import br.grupointegrado.facebug.util.ValidacaoUtil;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 public class UsuarioDAO extends DAO {
@@ -19,20 +23,45 @@ public class UsuarioDAO extends DAO {
      * @throws br.grupointegrado.facebug.exception.ValidacaoException
      */
     public static Usuario getUsuarioParameters(HttpServletRequest req) throws ValidacaoException {
-        String email = req.getParameter("email");
-        if (!ValidacaoUtil.validaEmail(email)) {
+        /*
+         Converte os parâmetros vindos na requisição, por um Map contendo todos os parâmetros.
+         Assim podemos aproveitar o mesmo método que faz a validação e montagem do objeto.
+         */
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        Enumeration<String> nomesParametros = req.getParameterNames();
+        while (nomesParametros.hasMoreElements()) {
+            String nome = nomesParametros.nextElement();
+            String valor = req.getParameter(nome);
+            // salva o parâmetro e seu valor no Map
+            parametros.put(nome, valor);
+        }
+        return getUsuarioParameters(parametros);
+    }
+
+    /**
+     * Monta um objeto Usuário a partir dos dados vindos de um Map
+     *
+     * @param parametrosMultipart
+     * @return
+     * @throws br.grupointegrado.facebug.exception.ValidacaoException
+     */
+    public static Usuario getUsuarioParameters(Map<String, Object> parametrosMultipart) throws ValidacaoException {
+        Integer id = ConversorUtil.stringParaInteger((String) parametrosMultipart.get("id"));
+        String email = (String) parametrosMultipart.get("email");
+        byte[] foto = (byte[]) parametrosMultipart.get("foto");
+        // valida o e-mail só quando o ID for igual a 0, ou seja, quando estiver inserindo
+        if (id == 0 && !ValidacaoUtil.validaEmail(email)) {
             throw new ValidacaoException("Informe um enedreço de e-mail válido.");
         }
-
         Usuario usuario = new Usuario();
-        usuario.setId(ConversorUtil.stringParaInteger(req.getParameter("id")));
-        usuario.setNome(req.getParameter("nome"));
-        usuario.setSobrenome(req.getParameter("sobrenome"));
+        usuario.setId(id);
+        usuario.setNome((String) parametrosMultipart.get("nome"));
+        usuario.setSobrenome((String) parametrosMultipart.get("sobrenome"));
         usuario.setEmail(email);
-        usuario.setSenha(CriptografiaUtil.criptografarMD5(req.getParameter("senha")));
-        usuario.setNascimento(ConversorUtil.stringParaDate(req.getParameter("nascimento")));
-        usuario.setApelido(req.getParameter("apelido"));
-        usuario.setFoto(null);
+        usuario.setSenha(CriptografiaUtil.criptografarMD5((String) parametrosMultipart.get("senha")));
+        usuario.setNascimento(ConversorUtil.stringParaDate((String) parametrosMultipart.get("nascimento")));
+        usuario.setApelido((String) parametrosMultipart.get("apelido"));
+        usuario.setFoto(foto);
         return usuario;
     }
 
@@ -57,6 +86,25 @@ public class UsuarioDAO extends DAO {
                 usuario.getFoto(),
                 usuario.getEmail(),
                 usuario.getSenha());
+    }
+
+    /**
+     * Edita todos os campos (exceto o e-mail) de um usuário no banco de dados.
+     *
+     * @param usuario
+     * @throws SQLException
+     */
+    public void editar(Usuario usuario) throws SQLException {
+        executaSQL("UPDATE usuario SET nome = ?, sobrenome = ?, apelido = ?, foto = ?, nascimento = ?, senha = ?"
+                + "WHERE id = ? ",
+                usuario.getNome(),
+                usuario.getSobrenome(),
+                usuario.getApelido(),
+                usuario.getFoto(),
+                ConversorUtil.dateParaSQLDate(usuario.getNascimento()),
+                usuario.getSenha(),
+                // não esquecer de setar o ID no Where
+                usuario.getId());
     }
 
     /**
@@ -108,8 +156,27 @@ public class UsuarioDAO extends DAO {
         usuario.setSenha(rs.getString("senha"));
         usuario.setNascimento(rs.getDate("nascimento"));
         usuario.setApelido(rs.getString("apelido"));
-        usuario.setFoto(rs.getBytes("foto"));
         return usuario;
+    }
+
+    /**
+     * Carrega a foto a partir do ID do usuário.
+     *
+     * @param idParam
+     * @return
+     * @throws SQLException
+     */
+    public byte[] consultaFoto(Integer idParam) throws SQLException {
+        byte[] foto = null;
+        PreparedStatement ps = conn.prepareStatement("SELECT foto FROM usuario WHERE id = ? ");
+        ps.setInt(1, idParam);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            foto = rs.getBytes("foto");
+        }
+        rs.close();
+        ps.close();
+        return foto;
     }
 
 }

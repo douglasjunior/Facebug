@@ -88,7 +88,8 @@ public class LoginFilter implements Filter {
         boolean isArquivoRecurso = servletPath.startsWith("/imagens/")
                 || servletPath.startsWith("/css/")
                 || servletPath.startsWith("/js/")
-                || servletPath.startsWith("/img/");
+                || servletPath.startsWith("/img/")
+                || servletPath.equals("/Imagem");
         return isArquivoRecurso;
     }
 

@@ -6,6 +6,10 @@
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
     List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
+
+    String mensagemErro = (String) request.getAttribute("mensagem_erro");
+    String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
+    session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
 %>
 <!DOCTYPE html>
 <html>
@@ -28,7 +32,7 @@
                     <div class="span12">
                         <!-- IMAGEM DO PERFIL -->
                         <div class="span2">
-                            <img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=HtmlUtil.xss(usuario.getNomeCompleto())%>"  />
+                            <img class="nav-list-profile-image" src="/Facebug/Imagem?origem=usuario&id=<%=usuario.getId()%>" title="<%=HtmlUtil.xss(usuario.getNomeCompleto())%>"  />
                         </div>
                         <div class="span10">
                             <h4><%= HtmlUtil.xss(usuario.getNomeCompleto())%></h4>
@@ -51,6 +55,16 @@
                             <li class="pull-right"><a href="#" class="btn btn-success">Adicionar amigo</a></li>
                                 <% }%>
                         </ul>
+                        <% if (mensagemErro != null) {%>
+                        <div class="alert alert-error">
+                            <%= mensagemErro%>
+                        </div>
+                        <%}%>
+                        <% if (mensagemSucesso != null) {%>
+                        <div class="alert alert-success">
+                            <%= mensagemSucesso%>
+                        </div>
+                        <%}%>
                         <div class="tab-content">
                             <!-- TAB SOBRE -->
                             <div class="tab-pane active" id="sobre">
@@ -101,11 +115,13 @@
                             <% if (usuarioLogado.equals(usuario)) {%>
                             <!-- TAB PERFIL -->
                             <div class="tab-pane" id="perfil">
-                                <form name="perfil" method="POST" action="Perfil" onsubmit="return validarPerfil();"
+                                <!-- Devido ao fato deste formulário fazer upload de Imagens, é preciso adicionar os atributos < enctype="multipart/form-data" accept-charset="utf-8" > -->
+                                <form name="perfil" method="POST" action="Perfil" onsubmit="return validarPerfil();" enctype="multipart/form-data" accept-charset="utf-8" 
                                       class="form-horizontal" >
                                     <h3>Edição do perfil.</h3>
                                     <br class="blank-line" />
                                     <input type="hidden" name="acao" value="editar" />
+                                    <input type="hidden" name="id" value="<%=usuario.getId()%>" />
                                     <div class="control-group">
                                         <label class="control-label" for="perfilFoto">Foto</label>
                                         <div class="controls">
@@ -115,31 +131,32 @@
                                     <div class="control-group">
                                         <label class="control-label" for="perfilNome">Nome</label>
                                         <div class="controls">
-                                            <input type="text" id="perfilNome" name="nome" value="" size="60" /> 
+                                            <input type="text" id="perfilNome" name="nome" value="<%=HtmlUtil.xss(usuario.getNome())%>" size="60" /> 
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="perfilSobrenome">Sobrenome</label>
                                         <div class="controls">
-                                            <input type="text" id="perfilSobrenome" name="sobrenome" value="" size="60" /> 
+                                            <input type="text" id="perfilSobrenome" name="sobrenome" value="<%=HtmlUtil.xss(usuario.getSobrenome())%>" size="60" /> 
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="perfilApelido">Apelido</label>
                                         <div class="controls">
-                                            <input type="text" id="perfilApelido" name="apelido" value="" size="60" /> 
+                                            <input type="text" id="perfilApelido" name="apelido" value="<%=HtmlUtil.xss(usuario.getApelido())%>" size="60" /> 
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="perfilNascimento">Nascimento</label>
                                         <div id="datepickerNascimento" class="controls input-append date" style="margin-left: 20px">
-                                            <input type="text" id="perfilNascimento" name="nascimento" size="60"><span class="add-on"><i class="icon-th"></i></span>
+                                            <input type="text" id="perfilNascimento" name="nascimento" value="<%=HtmlUtil.xss(usuario.getNascimentoString())%>" size="60">
+                                            <span class="add-on"><i class="icon-th"></i></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="perfilEmail">E-mail</label>
                                         <div class="controls">
-                                            <input type="text" id="perfilEmail" name="email" value="" size="60" readonly="readonly" disabled="disabled" /> 
+                                            <input type="text" id="perfilEmail" name="email" value="<%=HtmlUtil.xss(usuario.getEmail())%>" size="60" readonly="readonly" disabled="disabled" /> 
                                         </div>
                                     </div>
                                     <div class="control-group">
