@@ -12,7 +12,11 @@
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Perfil</title>
-
+        <script type="text/javascript">
+            function validarPerfil() {
+                return true;
+            }
+        </script>
     </head>
     <body>
         <%@include file="/WEB-INF/includes/topo.jsp" %>
@@ -97,7 +101,59 @@
                             <% if (usuarioLogado.equals(usuario)) {%>
                             <!-- TAB PERFIL -->
                             <div class="tab-pane" id="perfil">
-                                Aqui o usuário poderá editar o perfil
+                                <form name="perfil" method="POST" action="Perfil" onsubmit="return validarPerfil();"
+                                      class="form-horizontal" >
+                                    <h3>Edição do perfil.</h3>
+                                    <br class="blank-line" />
+                                    <input type="hidden" name="acao" value="editar" />
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilFoto">Foto</label>
+                                        <div class="controls">
+                                            <input type="file" id="perfilFoto" name="foto" value="" size="60" /> 
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilNome">Nome</label>
+                                        <div class="controls">
+                                            <input type="text" id="perfilNome" name="nome" value="" size="60" /> 
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilSobrenome">Sobrenome</label>
+                                        <div class="controls">
+                                            <input type="text" id="perfilSobrenome" name="sobrenome" value="" size="60" /> 
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilApelido">Apelido</label>
+                                        <div class="controls">
+                                            <input type="text" id="perfilApelido" name="apelido" value="" size="60" /> 
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilNascimento">Nascimento</label>
+                                        <div id="datepickerNascimento" class="controls input-append date" style="margin-left: 20px">
+                                            <input type="text" id="perfilNascimento" name="nascimento" size="60"><span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilEmail">E-mail</label>
+                                        <div class="controls">
+                                            <input type="text" id="perfilEmail" name="email" value="" size="60" readonly="readonly" disabled="disabled" /> 
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="perfilSenha">Senha</label>
+                                        <div class="controls">
+                                            <input type="password" id="perfilSenha" name="senha" value="" size="60" /> 
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <input type="submit" value="Editar" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <% }%>
                         </div>
@@ -121,6 +177,16 @@
                 e.preventDefault();
                 $(this).tab('show');
                 window.location = this;
+            });
+        </script>
+        <script type="text/javascript">
+            // código para configurar o Datepicker da data de nascimento
+            $(document).ready(function () {
+                $('#datepickerNascimento').datepicker({
+                    format: "dd/mm/yyyy",
+                    language: "pt-BR",
+                    autoclose: true
+                });
             });
         </script>
     </body>
