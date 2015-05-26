@@ -18,6 +18,41 @@ USE `facebugdb`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `amigo`
+--
+
+DROP TABLE IF EXISTS `amigo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `amigo` (
+  `id_usuario` int(11) NOT NULL,
+  `id_amigo` int(11) NOT NULL,
+  `aceitou` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id_usuario`,`id_amigo`),
+  KEY `fk_id_amigo_usuario_idx` (`id_amigo`),
+  CONSTRAINT `fk_id_amigo_usuario` FOREIGN KEY (`id_amigo`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_id_usuario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `foto`
+--
+
+DROP TABLE IF EXISTS `foto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `foto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `foto` blob NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_id_usuario_foto_idx` (`id_usuario`),
+  CONSTRAINT `fk_id_usuario_foto` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `postagem`
 --
 
@@ -33,7 +68,7 @@ CREATE TABLE `postagem` (
   PRIMARY KEY (`id`),
   KEY `fk_postagem_id_usuario_idx` (`id_usuario`),
   CONSTRAINT `fk_postagem_id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,7 +89,7 @@ CREATE TABLE `usuario` (
   `senha` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -66,4 +101,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-04 22:50:15
+-- Dump completed on 2015-05-25 22:20:38
