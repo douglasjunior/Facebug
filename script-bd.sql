@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS `foto`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `foto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `foto` blob NOT NULL,
+  `foto` mediumblob NOT NULL,
   `id_usuario` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_id_usuario_foto_idx` (`id_usuario`),
@@ -68,7 +68,7 @@ CREATE TABLE `postagem` (
   PRIMARY KEY (`id`),
   KEY `fk_postagem_id_usuario_idx` (`id_usuario`),
   CONSTRAINT `fk_postagem_id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,12 +84,12 @@ CREATE TABLE `usuario` (
   `sobrenome` varchar(200) NOT NULL,
   `nascimento` date DEFAULT NULL,
   `apelido` varchar(50) DEFAULT NULL,
-  `foto` blob,
+  `foto` mediumblob,
   `email` varchar(200) NOT NULL,
   `senha` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
