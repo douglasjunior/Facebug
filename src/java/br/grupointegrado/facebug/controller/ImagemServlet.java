@@ -34,7 +34,7 @@ public class ImagemServlet extends HttpServlet {
                 doGetFotoUsuario(req, resp);
             } else if ("album".equals(origem)) {
                 // recupera imagem do album de fotos
-                // implementar
+                doGetFotoAlbum(req, resp);
             } else {
                 // se a Origem não foi informada, devolve um erro 400 BAD REQUEST
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -89,5 +89,20 @@ public class ImagemServlet extends HttpServlet {
             fileinputstream.close();
         }
         return bytearray;
+    }
+
+    private void doGetFotoAlbum(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        /*
+         IMPLEMENTAR
+         */
+        byte[] fotoAlbum = null;
+        // se o usuário não tem foto, então carrega uma imagem padrão
+        if (fotoAlbum == null) {
+            fotoAlbum = carregarImagemPadrao();
+        }
+        // escreve os bytes da imagem como resposta na requisição
+        OutputStream out = resp.getOutputStream();
+        out.write(fotoAlbum);
+        out.flush();
     }
 }

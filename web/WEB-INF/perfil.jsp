@@ -16,6 +16,13 @@
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
         <title>Facebug - Perfil</title>
+        <style type="text/css">
+            .product {
+                width: 150px;
+                height: 150px;
+                display: inline-block;
+            }
+        </style>
         <script type="text/javascript">
             function validarPerfil() {
                 // implementar validação do formulário de perfil
@@ -112,11 +119,39 @@
                             </div>
                             <!-- TAB FOTOS -->
                             <div class="tab-pane" id="fotos">
-                                Listar fotos aqui
+                                <h3>Album de fotos.</h3>
+                                <div class="container-fluid">
+                                    <div class="row-fluid">
+                                        <div class="span12 products">
+                                            <% for (int i = 0; i < 15; i++) { %>
+                                            <div class="product">
+                                                <a href="#" >
+                                                    <img src="/Facebug/Imagem?origem=album&id=999" class="nav-list-profile-image">
+                                                </a>
+                                            </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- TAB AMIGOS -->
                             <div class="tab-pane" id="amigos">
-                                Listar amigos aqui
+                                <h3>Lista de amigos.</h3>
+                                <div class="container-fluid">
+                                    <div class="row-fluid">
+                                        <div class="span12 products">
+                                            <% for (int i = 0; i < 15; i++) { %>
+                                            <div class="product">
+                                                <a href="#" >
+                                                    <img src="/Facebug/Imagem?origem=usuario&id=999" class="nav-list-profile-image">
+                                                    <br class="blank-line" />
+                                                    Fulano de Tal
+                                                </a>
+                                            </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <%-- se o usuário logado está acessando o próprio perfil,
                                 então exibe o conteúdo da aba Perfil --%>
