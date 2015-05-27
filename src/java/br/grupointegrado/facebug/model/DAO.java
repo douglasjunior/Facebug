@@ -11,7 +11,7 @@ import java.util.List;
  * Este DAO abstrato é responsável por agrupar os códigos que são comuns e
  * existem em todos os DAO.
  *
- * @author douglas
+ * @author Antonio
  */
 public abstract class DAO {
 

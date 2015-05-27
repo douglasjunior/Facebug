@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Classe util para efetuar validações de campo String, Date, int, double,
  * etc...
  *
- * @author douglas
+ * @author Antonio
  */
 public class ValidacaoUtil {
 

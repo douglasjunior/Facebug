@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * Obs: Não esquecer de permitir que os arquivos CSS e JavaScript sejam
  * acessados mesmo sem Login.
  *
- * @author Douglas
+ * @author Antonio
  */
 public class LoginFilter implements Filter {
 

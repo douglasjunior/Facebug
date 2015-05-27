@@ -15,7 +15,7 @@ import javax.servlet.ServletResponse;
  * Filtro utilizado para conectar com o banco de dados e passar a conexão para
  * os Servlets
  *
- * @author douglas
+ * @author Antonio
  */
 public class ConexaoFilter implements Filter {
     
@@ -55,7 +55,7 @@ public class ConexaoFilter implements Filter {
     private Connection abrirConexao() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/facebugdb";
-        return DriverManager.getConnection(url, "root", "root");
+        return DriverManager.getConnection(url, "root", "");
     }
 
     /**

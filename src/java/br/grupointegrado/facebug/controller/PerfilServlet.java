@@ -21,7 +21,7 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 /**
  * Servlet resposnábel pelas requisições da página de Perfil.
  *
- * @author Douglas
+ * @author Antonio
  */
 public class PerfilServlet extends HttpServlet {
 

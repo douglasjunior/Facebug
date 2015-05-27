@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet utilizado para carregamento de imagens do banco de dados.
  *
- * @author douglas
+ * @author Antonio
  */
 public class ImagemServlet extends HttpServlet {
 

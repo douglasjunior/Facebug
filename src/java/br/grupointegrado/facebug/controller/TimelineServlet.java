@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Douglas
+ * @author Antonio
  */
 public class TimelineServlet extends HttpServlet {
 

@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Classe útil utilizada para criptografias, como a criptografia de senha.
  *
- * @author Douglas
+ * @author Antonio
  */
 public class CriptografiaUtil {
 
