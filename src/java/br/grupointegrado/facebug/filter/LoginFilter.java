@@ -29,13 +29,19 @@ public class LoginFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         if (isArquivoRecurso(req) || isPaginaLogin(req) || estaLogado(req)) {
-            System.out.println("Liberou: " + req.getServletPath());
-            chain.doFilter(request, response);
+
+            if(isPaginaLogin(req) && estaLogado(req) && !"sair".equals(verificaAcao(req))) {
+                resp.sendRedirect("/Facebug/Timeline");
+            }else{
+               System.out.println("Liberou: " + req.getServletPath());
+               chain.doFilter(request, response);
+            } 
+
         } else {
             salvarPaginaRedirecionada(req);
             System.out.println("Bloqueou: " + req.getServletPath());
             resp.sendRedirect("/Facebug/Login");
-        }
+        }   
     }
 
     @Override
@@ -102,6 +108,18 @@ public class LoginFilter implements Filter {
     private void salvarPaginaRedirecionada(HttpServletRequest req) {
         String servletPath = req.getServletPath();
         req.getSession().setAttribute("pagina_redireciona", servletPath);
+    }
+    
+     /**
+     * Retorna uma ação efetuada pelo usuário.
+     *
+     * @param req
+     * @return 
+     */
+     private String verificaAcao(HttpServletRequest req) {
+        HttpSession sessao = req.getSession();
+        String acaoParam = req.getParameter("acao");
+        return acaoParam;
     }
 
 }
