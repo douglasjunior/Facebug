@@ -72,7 +72,8 @@ public class ImagemServlet extends HttpServlet {
     }
 
     /**
-     * Lê a imagem padrão do usuário.
+     * Lê a imagem padrão do usuário que fica na pasta
+     * /imagens/perfil-padrao.png.
      *
      * @return
      * @throws IOException

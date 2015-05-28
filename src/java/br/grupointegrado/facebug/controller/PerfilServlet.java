@@ -24,7 +24,7 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
  * @author Douglas
  */
 public class PerfilServlet extends HttpServlet {
-
+ 
     /**
      * Na requisição por GET devemos carregar todos os dados necessários para
      * exibir a página de perfil do isioário.<br>
@@ -73,13 +73,13 @@ public class PerfilServlet extends HttpServlet {
                 // se a requisição não é multipart, então os parâmetros são recuperados normalmente
                 acao = req.getParameter("acao");
             }
-            
+
             // verifica qual é a ação recebida
             if ("editar".equals(acao)) {
                 doPostEditarPerfil(req, parametrosMultipart);
                 resp.sendRedirect("/Facebug/Perfil#perfil");
             }
-            
+
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
@@ -96,17 +96,20 @@ public class PerfilServlet extends HttpServlet {
     }
 
     private void doPostEditarPerfil(HttpServletRequest req, Map<String, Object> parametrosMultipart) throws ServletException, IOException, ValidacaoException, FileUploadException, Exception {
-        Usuario usuario = UsuarioDAO.getUsuarioParameters(parametrosMultipart);
-
         Connection conn = (Connection) req.getAttribute("conexao");
-
         UsuarioDAO dao = new UsuarioDAO(conn);
 
+        /*
+         Monta o usuário com os parâmetros vindos na requisição Multipart
+         */
+        Usuario usuario = UsuarioDAO.getUsuarioParameters(parametrosMultipart);
         dao.editar(usuario);
 
-        // substitui o usuário logado na sessão com os dados atualizados
+        /*
+         Substitui o usuário logado na sessão com os dados atualizados
+         */
         req.getSession().setAttribute("usuario_logado", dao.consultaId(usuario.getId()));
-        
+
         req.getSession().setAttribute("mensagem_sucesso", "Os dados do usuário foram atualizados com sucesso.");
     }
 }

@@ -29,19 +29,20 @@ public class LoginFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         if (isArquivoRecurso(req) || isPaginaLogin(req) || estaLogado(req)) {
+            System.out.println("Liberou: " + req.getServletPath());
 
-            if(isPaginaLogin(req) && estaLogado(req) && !"sair".equals(verificaAcao(req))) {
+            // verifica se o usuário está tentando acessar a página de Login depois de estar logado.
+            if (isPaginaLogin(req) && estaLogado(req) && !acaoSair(req)) {
                 resp.sendRedirect("/Facebug/Timeline");
-            }else{
-               System.out.println("Liberou: " + req.getServletPath());
-               chain.doFilter(request, response);
-            } 
+            } else {
+                chain.doFilter(request, response);
+            }
 
         } else {
             salvarPaginaRedirecionada(req);
             System.out.println("Bloqueou: " + req.getServletPath());
             resp.sendRedirect("/Facebug/Login");
-        }   
+        }
     }
 
     @Override
@@ -109,17 +110,20 @@ public class LoginFilter implements Filter {
         String servletPath = req.getServletPath();
         req.getSession().setAttribute("pagina_redireciona", servletPath);
     }
-    
-     /**
-     * Retorna uma ação efetuada pelo usuário.
+
+    /**
+     * Verifica se o usuário clicou no botão de SAIR.
      *
      * @param req
-     * @return 
+     * @return
      */
-     private String verificaAcao(HttpServletRequest req) {
-        HttpSession sessao = req.getSession();
+    private boolean acaoSair(HttpServletRequest req) {
+        /*
+         Para verificar se o usuário clicou na ação Sair, não basta verificar o nome da ação, 
+         tem que verificar se é o Servlet de Login.
+         */
         String acaoParam = req.getParameter("acao");
-        return acaoParam;
+        return isPaginaLogin(req) && "sair".equals(acaoParam);
     }
 
 }

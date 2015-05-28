@@ -92,20 +92,30 @@ public class UsuarioDAO extends DAO {
     /**
      * Edita todos os campos (exceto o e-mail) de um usuário no banco de dados.
      *
-     * @param usuario
+     * @param novoUsuario
      * @throws SQLException
      */
     public void editar(Usuario novoUsuario) throws SQLException {
+        /*
+         usuarioNovo: é o objeto Usuário com os novos dados para edição
+         usuarioAntigo: é o objeto Usuário com as informações antigas do banco de dados
+         */
         Usuario usuarioAntigo = consultaId(novoUsuario.getId());
+
+        // busca a foto antiga que estava armazenada no banco de dados.
         byte[] foto = consultaFoto(novoUsuario.getId());
-        // se o novo usuário está sem foto, então mantem a foto anterior
+
+        // se o novo usuário está sem foto, então mantem a foto antiga
         if (novoUsuario.getFoto() == null || novoUsuario.getFoto().length == 0) {
             novoUsuario.setFoto(foto);
         }
-        // se o novo usuário está sem senha, então mantem a senha anterior
+
+        // se o novo usuário está sem senha, então mantem a senha antiga
         if (novoUsuario.getSenha() == null || novoUsuario.getSenha().isEmpty()) {
             novoUsuario.setSenha(usuarioAntigo.getSenha());
         }
+
+        // finalmente executa o UPDATE
         executaSQL("UPDATE usuario SET nome = ?, sobrenome = ?, apelido = ?, foto = ?, nascimento = ?, senha = ?"
                 + "WHERE id = ? ",
                 novoUsuario.getNome(),
@@ -150,7 +160,7 @@ public class UsuarioDAO extends DAO {
     }
 
     /**
-     * Implementação do método abstrato, responsável por montar um Usuário a
+     * Implementação do método abstrato responsável por montar um Usuário a
      * partir dos dados do ResultSet.
      *
      * @param rs
@@ -171,7 +181,10 @@ public class UsuarioDAO extends DAO {
     }
 
     /**
-     * Carrega a foto a partir do ID do usuário.
+     * Carrega a foto em um array de bytes a partir do ID do usuário.<br>
+     * Como a foto se trata de um array de bytes, pode ser um processo lento
+     * para carregá-la do banco de dados. Por isso foi criado um método separado
+     * para buscar a foto.
      *
      * @param idParam
      * @return
