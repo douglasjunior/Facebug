@@ -103,13 +103,13 @@
                                             <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
                                         </div>
                                         <div class="span10 postagem-nome"  >
-                                            <h4><%= HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
+                                            <h4><%=HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
                                             <small class="muted">Compartilhado com <%=postagem.isPublica() ? "público" : "amigos"%> - <%=postagem.getDataToString()%></small>
                                         </div>
                                         <br class="blank-line" />
                                         <hr class="bs-docs-separator blank-line" /> 
                                         <div class="span12">
-                                            <%=HtmlUtil.xss(postagem.getTexto())%>
+                                            <%=HtmlUtil.quebraLinha(HtmlUtil.xss(postagem.getTexto()))%>
                                         </div>
                                     </div>
                                     <br class="blank-line" /><br class="blank-line"/>
