@@ -6,7 +6,7 @@ Página para ser utilizada como Exemplo de Template na criação de novas págin
 <html>
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
-        <title>Exemplo template</title>
+        <title>Exemplo template teste</title>
     </head>
     <body>
         <%@include file="/WEB-INF/includes/topo.jsp" %>
