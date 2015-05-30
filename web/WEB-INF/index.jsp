@@ -39,7 +39,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="div-menu-conteudo">
-                    <!-- MENU LATERAL ESQUERDO -->
+                    <!-- MENU LATERAL ESQUERDO 123345 -->
                     <div class="div-menu span2">
                         <%@include file="/WEB-INF/includes/menu.jsp" %>
                     </div>
