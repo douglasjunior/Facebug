@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
+    private Usuario usuariodevolver;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -92,6 +93,7 @@ public class LoginServlet extends HttpServlet {
         try {
             Usuario usuario = UsuarioDAO.getUsuarioParameters(req);
             Connection conn = (Connection) req.getAttribute("conexao");
+            usuariodevolver = usuario;
             new UsuarioDAO(conn).inserir(usuario);
             req.getSession().setAttribute("mensagem_sucesso", "Usuário cadastrado com sucesso, efetue Login para continuar.");
             resp.sendRedirect("/Facebug/Login");
@@ -102,6 +104,7 @@ public class LoginServlet extends HttpServlet {
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível efetuar o cadastro, tente novamente mais tarde.");
+            req.setAttribute("usuario", usuariodevolver);
             req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         }
     }

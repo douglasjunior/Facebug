@@ -1,5 +1,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+     Usuario usuario = (Usuario) request.getAttribute("usuario");
+    if (usuario == null) {
+       usuario = new Usuario();
+       usuario.setNome("");
+       usuario.setSobrenome("");
+       usuario.setEmail("");
+   }
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso"); // devido ao problema do PRG, nossa mensagem de sucesso deve trafegar na sessão
     session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
@@ -117,19 +124,19 @@
                             <div class="control-group">
                                 <label class="control-label" for="cadNome">Nome</label>
                                 <div class="controls">
-                                    <input type="text" id="cadNome" name="nome" value="" size="40" /> 
+                                    <input type="text" id="cadNome" name="nome" value="<%=usuario.getNome()%>" size="40" /> 
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="cadSobrenome">Sobrenome</label>
                                 <div class="controls">
-                                    <input type="text" id="cadSobrenome" name="sobrenome" value="" size="40" /> 
+                                    <input type="text" id="cadSobrenome" name="sobrenome" value="<%=usuario.getSobrenome()%>" size="40" /> 
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="cadEmail">E-mail</label>
                                 <div class="controls">
-                                    <input type="text" id="cadEmail" name="email" value="" size="40" /> 
+                                    <input type="text" id="cadEmail" name="email" value="<%=usuario.getEmail()%>" size="40" /> 
                                 </div>
                             </div>
                             <div class="control-group">
