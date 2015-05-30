@@ -23,7 +23,10 @@ public class Usuario {
     }
 
     public Usuario() {
-    
+        nome = "";
+        sobrenome = "";
+        email = "";
+        senha = "";
     }
     
     public int getId() {

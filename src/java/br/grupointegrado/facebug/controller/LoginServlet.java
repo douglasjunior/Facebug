@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
-    private Usuario usuariodevolver;
-
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
@@ -90,21 +89,22 @@ public class LoginServlet extends HttpServlet {
          * Sendo assim, quando a postagem for gravada com sucesso, temos que
          * efetuar um sendRedirec() para concluir o processo.
          */
+        Usuario usuario = null;
         try {
-            Usuario usuario = UsuarioDAO.getUsuarioParameters(req);
+            usuario = UsuarioDAO.getUsuarioParameters(req);
             Connection conn = (Connection) req.getAttribute("conexao");
-            usuariodevolver = usuario;
             new UsuarioDAO(conn).inserir(usuario);
             req.getSession().setAttribute("mensagem_sucesso", "Usuário cadastrado com sucesso, efetue Login para continuar.");
             resp.sendRedirect("/Facebug/Login");
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
+            req.setAttribute("usuario_cadastro", usuario);
             req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível efetuar o cadastro, tente novamente mais tarde.");
-            req.setAttribute("usuario", usuariodevolver);
+            req.setAttribute("usuario_cadastro", usuario);
             req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
         }
     }
