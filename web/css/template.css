@@ -31,9 +31,11 @@ body {
     width: 720px;
     padding: 0px;
     padding-right: 194px;
+    word-wrap: break-word;
 }
 .div-conteudo {
     width: 496px !important;
+    word-wrap: break-word;
 }
 .div-menu {
     width: 194px !important;
@@ -42,24 +44,31 @@ body {
     background-color: white !important; 
     padding: 20px !important;
     margin: 0px !important;
+    word-wrap: break-word;
 }
 .postagem-form {
     margin: 0px !important;
+    word-wrap: break-word;
 }
 .postagem-profile-image {
     height: 50px !important;
     float: left;
+    word-wrap: break-word;
 }
 .postagem-data {
     float: right;
+    word-wrap: break-word;
 }
 .postagem-nome {
     margin: 0px !important;
+    word-wrap: break-word;
 }
 .postagem-nome h4 {
     margin: 0px !important;
     margin-bottom: 10px !important;
+    word-wrap: break-word;
 }
 .postagem-box {
+    word-wrap: break-word;
     word-wrap: break-word;
 }
