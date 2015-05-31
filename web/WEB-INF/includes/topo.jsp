@@ -16,7 +16,7 @@
                 <%-- Verifica se o usuário é diferente de Null, pois a barra de topo é exibida mesmo quando o usuário não está logado --%>
                 <% if (usuarioLogadoTopo != null) {%>
                 <ul class="nav pull-right">
-                    <li><img class="navbar-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=HtmlUtil.xss(usuarioLogadoTopo.getNomeCompleto())%>" /></li>
+                    <li><img class="navbar-profile-image" src="/Facebug/Imagem?origem=usuario&id=<%=usuarioLogadoTopo.getId()%>" title="<%=HtmlUtil.xss(usuarioLogadoTopo.getNomeCompleto())%>" /></li>
                     <li><a href="/Facebug/Perfil">Perfil</a></li>
                     <li class="divider-vertical"></li>
                     <li><a href="/Facebug/">Página inicial</a></li>

@@ -55,6 +55,7 @@ public class ImagemServlet extends HttpServlet {
     private void doGetFotoUsuario(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Connection conn = (Connection) req.getAttribute("conexao");
         Integer idParam = ConversorUtil.stringParaInteger(req.getParameter("id"));
+        
         if (idParam == 0) {
             // se o ID não foi informado, devolve um erro 400 BAD REQUEST
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

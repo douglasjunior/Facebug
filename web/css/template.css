@@ -8,9 +8,11 @@ body {
 }
 .navbar-profile-image{
     height: 40px;
+    width: 40px;
 }
 .nav-list-profile-image{
     height: 100px;
+    width: 100px;
 }
 .navbar-logo-image {
     padding: 0px;
@@ -48,6 +50,7 @@ body {
 }
 .postagem-profile-image {
     height: 50px !important;
+    width: 50px;
     float: left;
 }
 .postagem-data {

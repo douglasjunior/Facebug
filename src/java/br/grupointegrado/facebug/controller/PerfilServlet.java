@@ -53,6 +53,9 @@ public class PerfilServlet extends HttpServlet {
              */
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
+            List<Usuario> amigos = new UsuarioDAO(conn).consultaAmigos(usuario);
+            req.setAttribute("amigos", amigos);
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível carregar o perfil completamente, tente novamente mais tarde.");

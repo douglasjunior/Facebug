@@ -79,14 +79,14 @@
                         <% for (Postagem postagem : postagens) {%>
                         <div class="span12 postagem" >
                             <div class="span2">
-                                <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
+                                <img src="/Facebug/Imagem?origem=usuario&id=<%=postagem.getUsuario().getId()%>" class="postagem-profile-image"  />
                             </div>
                             <div class="span10 postagem-nome"  >
                                 <div class="btn-group" style="float: right">
                                     <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="Timeline?acao=editar&id=<%=postagem.getId()%>">Editar</a></li>
-                                        <li><a onclick="excluirPostagem(<%=postagem.getId()%>)">Excluir</a></li>
+                                        <li><a href="Timeline?acao=editar&id=<%=postagem.getId()%>"><i class="icon-pencil"></i> Editar</a></li>
+                                        <li><a onclick="excluirPostagem(<%=postagem.getId()%>)"><i class="icon-trash"></i> Excluir</a></li>
                                     </ul>
                                 </div>
                                 <h4><%= HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
