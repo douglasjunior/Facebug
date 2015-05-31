@@ -108,7 +108,7 @@
                                         </div>
                                         <br class="blank-line" />
                                         <hr class="bs-docs-separator blank-line" /> 
-                                        <div class="span12">
+                                        <div class="span12 postagem-box">
                                             <%=HtmlUtil.quebraLinha(HtmlUtil.xss(postagem.getTexto()))%>
                                         </div>
                                     </div>
