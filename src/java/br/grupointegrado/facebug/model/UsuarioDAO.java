@@ -8,8 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
@@ -190,4 +192,40 @@ public class UsuarioDAO extends DAO {
         return foto;
     }
 
+    public List<byte[]> consultaFotoAlbum(Integer idParam) throws SQLException {
+
+        List<byte[]> fotos = new ArrayList<byte[]>();
+
+        byte[] foto = null;
+        PreparedStatement ps = conn.prepareStatement("SELECT foto FROM foto WHERE id_usuario = ? order by id");
+        ps.setInt(1, idParam);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            foto = rs.getBytes("foto");
+            fotos.add(foto);
+        }
+        rs.close();
+        ps.close();
+        //System.out.println(fotoAlbum);
+        return fotos;
+    }
+
+    public void salvarFoto(Foto f) throws SQLException {
+
+        executaSQL("INSERT INTO foto (foto, id_usuario) "
+                + "VALUES (?, ?) ",
+                f.getFoto(),
+                f.getId_usuario());
+        System.out.println("SALVOU FOTO");
+
+    }
+
+    public static Foto getFotoParameters(Map<String, Object> parametrosMultipart) throws ValidacaoException {
+
+        byte[] foto = (byte[]) parametrosMultipart.get("foto");
+        Foto f = new Foto();
+
+        f.setFoto(foto);
+        return f;
+    }
 }

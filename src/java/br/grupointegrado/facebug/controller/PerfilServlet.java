@@ -1,6 +1,7 @@
 package br.grupointegrado.facebug.controller;
 
 import br.grupointegrado.facebug.exception.ValidacaoException;
+import br.grupointegrado.facebug.model.Foto;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Usuario;
@@ -51,6 +52,8 @@ public class PerfilServlet extends HttpServlet {
             /*
              * Carrega somentes as postagens do usuário que foi carregado. 
              */
+
+            // List<Foto> fotos = new UsuarioDAO(conn).consultaFotoAlbum(usuario.getId());
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
         } catch (SQLException ex) {
@@ -62,6 +65,7 @@ public class PerfilServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         try {
             String acao = "";
             // recupera os parâmetros de requisição multipart
@@ -73,13 +77,18 @@ public class PerfilServlet extends HttpServlet {
                 // se a requisição não é multipart, então os parâmetros são recuperados normalmente
                 acao = req.getParameter("acao");
             }
-            
+
+            //  System.out.println("acao " + acao);
             // verifica qual é a ação recebida
             if ("editar".equals(acao)) {
                 doPostEditarPerfil(req, parametrosMultipart);
                 resp.sendRedirect("/Facebug/Perfil#perfil");
+            } else if ("salvarAlbum".equals(acao)) {
+                doPostSalvarFoto(req, parametrosMultipart);
+                resp.sendRedirect("/Facebug/Perfil#fotos");
+                System.out.println("ENTROU PARA SALVAR FOTO");
             }
-            
+
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
@@ -106,7 +115,38 @@ public class PerfilServlet extends HttpServlet {
 
         // substitui o usuário logado na sessão com os dados atualizados
         req.getSession().setAttribute("usuario_logado", dao.consultaId(usuario.getId()));
-        
+
         req.getSession().setAttribute("mensagem_sucesso", "Os dados do usuário foram atualizados com sucesso.");
+    }
+
+    private void doPostSalvarFoto(HttpServletRequest req, Map<String, Object> parametrosMultipart) throws ServletException, IOException, ValidacaoException, FileUploadException, Exception {
+
+        try {
+            Foto foto = UsuarioDAO.getFotoParameters(parametrosMultipart);
+
+            Integer idParam;
+            //Integer idParam = ConversorUtil.stringParaInteger(req.getParameter("id"));
+            // recupera os parâmetros de requisição multipart
+            // se os parâmetros não forem NULL, então se trata de uma requisição multipart
+            if (parametrosMultipart != null) {
+                idParam = ConversorUtil.stringParaInteger(parametrosMultipart.get("id").toString());
+            } else {
+                // se a requisição não é multipart, então os parâmetros são recuperados normalmente
+                idParam = ConversorUtil.stringParaInteger(req.getParameter("id"));
+            }
+
+            foto.setId_usuario(idParam);
+
+            System.out.println("Foto : " + foto.getId());
+
+            Connection conn = (Connection) req.getAttribute("conexao");
+
+            UsuarioDAO dao = new UsuarioDAO(conn);
+
+            dao.salvarFoto(foto);
+            req.getSession().setAttribute("mensagem_sucesso", "Foto Inserida com sucesso.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

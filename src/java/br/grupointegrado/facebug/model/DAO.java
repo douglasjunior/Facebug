@@ -87,6 +87,7 @@ public abstract class DAO {
             int index = i + 1;
             ps.setObject(index, parametros[i]);
         }
+        
         ps.execute();
         ps.close();
     }

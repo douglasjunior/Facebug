@@ -11,6 +11,7 @@
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
     session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
 %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -56,7 +57,6 @@
                             <% }%>
                         </div>
                         <br class="blank-line" />
-
                         <!-- LISTA QUE REPRESENTA AS ABAS -->
                         <ul class="nav nav-pills" id="myTab" style="background-color: white">
                             <li class="active"><a href="#sobre">Sobre</a></li>
@@ -117,22 +117,38 @@
                                 </div>
 
                             </div>
+
                             <!-- TAB FOTOS -->
                             <div class="tab-pane" id="fotos">
-                                <h3>Album de fotos.</h3>
-                                <div class="container-fluid">
-                                    <div class="row-fluid">
-                                        <div class="span12 products">
-                                            <% for (int i = 0; i < 15; i++) { %>
-                                            <div class="product">
-                                                <a href="#" >
-                                                    <img src="/Facebug/Imagem?origem=album&id=999" class="nav-list-profile-image">
-                                                </a>
+                                <form name="fotos" method="POST" action="Perfil" enctype="multipart/form-data" accept-charset="utf-8" 
+                                      class="form-horizontal" >
+                                    <h3>Album de fotos.</h3>
+
+                                    <input type="hidden" name="acao" value="salvarAlbum" />
+                                    <input type="hidden" name="id" value="<%=usuario.getId()%>" />
+
+                                    <div class="container-fluid">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <input type="file" id="albumFoto" name="foto" value="" size="10000" /> 
+                                                <button type="submit" name="acao" value="salvarAlbum">Salvar</button>
+                                                <!input type="submit" value="Salvar" class="btn btn-primary" />
                                             </div>
-                                            <% } %>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12 products">
+
+                                                <% for (int i = 1; i <= 15; i++) {%>
+                                                <div class="product">
+                                                    <a href="#" >
+                                                        <img src="/Facebug/Imagem?origem=album&ii=<%=i%>&id=<%=usuario.getId()%>" class="nav-list-profile-image">
+                                                    </a>
+                                                </div>
+                                                <% } %>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </form>   
                             </div>
                             <!-- TAB AMIGOS -->
                             <div class="tab-pane" id="amigos">
@@ -140,10 +156,12 @@
                                 <div class="container-fluid">
                                     <div class="row-fluid">
                                         <div class="span12 products">
-                                            <% for (int i = 0; i < 15; i++) { %>
+
+
+                                            <% for (int i = 0; i <= 15; i++) {%>
                                             <div class="product">
                                                 <a href="#" >
-                                                    <img src="/Facebug/Imagem?origem=usuario&id=999" class="nav-list-profile-image">
+                                                    <img src="/Facebug/Imagem?origem=usuario&id=<%=usuario.getId()%>" class="nav-list-profile-image">
                                                     <br class="blank-line" />
                                                     Fulano de Tal
                                                 </a>
