@@ -6,7 +6,8 @@
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
     List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
-
+    List<Usuario> amigos = (List<Usuario>) request.getAttribute("amigos");
+ 
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
     session.removeAttribute("mensagem_sucesso"); // sempre devemos remover a mensagem de sucesso depois de recuperá-la da sessão
@@ -140,12 +141,12 @@
                                 <div class="container-fluid">
                                     <div class="row-fluid">
                                         <div class="span12 products">
-                                            <% for (int i = 0; i < 15; i++) { %>
+                                            <% for (Usuario amigo : amigos) { %>
                                             <div class="product">
-                                                <a href="#" >
-                                                    <img src="/Facebug/Imagem?origem=usuario&id=999" class="nav-list-profile-image">
+                                                <a href="/Facebug/Perfil?id=<%=amigo.getId()%>" >
+                                                    <img src="/Facebug/Imagem?origem=usuario&id=<%=amigo.getId()%>" class="nav-list-profile-image">
                                                     <br class="blank-line" />
-                                                    Fulano de Tal
+                                                    <%=amigo.getNomeCompleto()%>
                                                 </a>
                                             </div>
                                             <% } %>
