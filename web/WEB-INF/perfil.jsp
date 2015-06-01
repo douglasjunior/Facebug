@@ -100,7 +100,7 @@
                                     <% for (Postagem postagem : postagens) {%>
                                     <div class="span12 postagem" >
                                         <div class="span2">
-                                            <img src="/Facebug/imagens/perfil-padrao.jpg" class="postagem-profile-image"  />
+                                            <img src="/Facebug/Imagem?origem=usuario&id=<%=postagem.getUsuario().getId()%>" class="postagem-profile-image"  />
                                         </div>
                                         <div class="span10 postagem-nome"  >
                                             <h4><%=HtmlUtil.xss(postagem.getUsuario().getNomeCompleto())%></h4>
