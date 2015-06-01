@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
@@ -217,6 +218,15 @@ public class UsuarioDAO extends DAO {
         rs.close();
         ps.close();
         return foto;
+    }
+    
+    public List consultaAmigos (Usuario usuario) throws SQLException {
+        
+        List<Usuario> amigos = consultaLista("SELECT * FROM usuario "
+                        + "inner join amigo a on (a.id_amigo = usuario.id) "
+                        + "inner join usuario u on (u.id = a.id_usuario) "
+                        + "where a.id_usuario = ? and a.aceitou = ?", usuario.getId(), 1);  
+        return amigos;
     }
 
 }
