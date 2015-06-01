@@ -5,7 +5,7 @@
     Usuario usuarioLogadoMenu = (Usuario) session.getAttribute("usuario_logado");
 %>
 <ul class="nav nav-list">
-    <li><img class="nav-list-profile-image" src="/Facebug/imagens/perfil-padrao.jpg" title="<%=HtmlUtil.xss(usuarioLogadoMenu.getNomeCompleto())%>"  /><br />
+    <li><img class="nav-list-profile-image" src="/Facebug/Imagem?origem=usuario&id=<%=usuarioLogadoMenu.getId()%>" title="<%=HtmlUtil.xss(usuarioLogadoMenu.getNomeCompleto())%>"  /><br />
         <%= HtmlUtil.xss(usuarioLogadoMenu.getNomeCompleto())%></li>
     <br />
     <li class="nav-header">Links</li>
