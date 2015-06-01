@@ -26,6 +26,27 @@
         <script type="text/javascript">
             function validarPerfil() {
                 // implementar validação do formulário de perfil
+                var nome = document.perfil.nome.value;
+                var sobrenome = document.perfil.sobrenome.value;
+                var senha = document.perfil.senha.value;
+        
+                if(!validaTexto(nome)){
+                    alert("O campo Nome deve ter no minimo 1 caracteres.");
+                    document.perfil.nome.focus();
+                    return false;
+                }
+                if(!validaTexto(sobrenome)){
+                    alert("O campo Sobrenome deve ter no minimo 1 caracteres.");
+                    document.perfil.sobrenome.focus();
+                    return false;
+                }
+                if(document.perfil.habilitaSenha.checked){
+                    if(!validaSenha(senha)){
+                        alert("O campo Senha deve ter no minimo 8 caracteres.");
+                        document.perfil.senha.focus();
+                        return false;
+                    }
+                }    
                 return true;
             }
             function habilitarDesabilitaSenha() {
