@@ -10,6 +10,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 /**
  * Filtro utilizado para conectar com o banco de dados e passar a conexão para
@@ -18,11 +22,11 @@ import javax.servlet.ServletResponse;
  * @author douglas
  */
 public class ConexaoFilter implements Filter {
-    
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
-    
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         /*
@@ -31,20 +35,24 @@ public class ConexaoFilter implements Filter {
          Neste caso, podemos aproveitar o filtro ConexaoFilter para tal ação.
          */
         request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");  
         
-        Connection conn = null;
-        try {
-            conn = abrirConexao();
-            request.setAttribute("conexao", conn);
-            chain.doFilter(request, response);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        } finally {
-            fecharConexao(conn);
-        }
-    }
+  
+            Connection conn = null;
+            try {
+                conn = abrirConexao();
+                request.setAttribute("conexao", conn);
+                chain.doFilter(request, response);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                fecharConexao(conn);
+            }
+        
 
+    }
+    
+   
     /**
      * Cria uma conexão JDBC
      *
@@ -69,7 +77,7 @@ public class ConexaoFilter implements Filter {
         } catch (Exception ex) {
         }
     }
-    
+
     @Override
     public void destroy() {
     }
