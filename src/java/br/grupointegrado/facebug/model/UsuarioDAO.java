@@ -47,29 +47,34 @@ public class UsuarioDAO extends DAO {
      */
     public static Usuario getUsuarioParameters(Map<String, Object> parametrosMultipart) throws ValidacaoException {
         Integer id = ConversorUtil.stringParaInteger((String) parametrosMultipart.get("id"));
+        Boolean cadastrando = id == 0;
         String nome = (String) parametrosMultipart.get("nome");
         String sobrenome = (String) parametrosMultipart.get("sobrenome");
         String email = (String) parametrosMultipart.get("email");
         byte[] foto = (byte[]) parametrosMultipart.get("foto");
         String senha = (String) parametrosMultipart.get("senha");
-        
+        Boolean habilitaSenha = "on".equals(parametrosMultipart.get("habilitaSenha"));
+
         if (!ValidacaoUtil.validaString(nome, 1)) {
             throw new ValidacaoException("Informe o nome.");
         }
-        
+
         if (!ValidacaoUtil.validaString(sobrenome, 1)) {
             throw new ValidacaoException("Informe o sobrenome.");
         }
-        
+
         // valida o e-mail só quando o ID for igual a 0, ou seja, quando estiver inserindo
         if (id == 0 && !ValidacaoUtil.validaEmail(email)) {
             throw new ValidacaoException("Informe um enedreço de e-mail válido.");
         }
-        
-        if (!ValidacaoUtil.validaString(senha, 8)) {
-            throw new ValidacaoException("Informe a senha com mais de 8 caracteres.");
+
+        // Valida a senha somente se estiver cadastrando, ou se o "habilitaSenha" for selecionado.
+        if (cadastrando || habilitaSenha) {
+            if (!ValidacaoUtil.validaString(senha, 8)) {
+                throw new ValidacaoException("Informe a senha com mais de 8 caracteres.");
+            }
         }
-        
+
         Usuario usuario = new Usuario();
         usuario.setId(id);
         usuario.setNome(nome);
