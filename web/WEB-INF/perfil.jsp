@@ -23,18 +23,13 @@
                 display: inline-block;
             }
         </style>
-        
+
         <script type="text/javascript">
-                 function validarPerfil() {
-                 data = new Date();
-                  anoAtual = data.getFullYear();
+            function validarPerfil() {
                 var nome = document.perfil.nome.value;
                 var sobrenome = document.perfil.sobrenome.value;
-                var email = document.perfil.email.value;
                 var nascimento = document.perfil.nascimento.value;
-                var validaNasc = nascimento[6]+nascimento[7]+nascimento[8]+nascimento[9];
-    
-
+                var email = document.perfil.email.value;
                 var senha = document.perfil.senha.value;
 
                 if (!validaTexto(nome)) {
@@ -44,22 +39,17 @@
                 }
 
                 if (!validaTexto(sobrenome)) {
-                     alert("O campo Nome deve ter no mínimo 1 caractere.");
+                    alert("O campo Nome deve ter no mínimo 1 caractere.");
                     document.perfil.sobrenome.focus();
                     return false;
                 }
-                
-                 if(validaNasc<1900){
-                    alert("A data de nascimento deve ser maior que 2013");
+
+                var anoAtual = new Date().getFullYear();
+                if (!validaData(nascimento, 1900, anoAtual)) {
+                    alert("A data de nascimento deve estar entre 1900 e " + anoAtual + ".");
                     document.perfil.nascimento.focus();
-                    return false;  
-                 }
-                 if ((validaNasc>=anoAtual)){
-                     alert("A data de nascimento deve ser menor que 2015");
-                    document.perfil.nascimento.focus();
-                    return false;  
-                     }
-                
+                    return false;
+                }
 
                 if (!validaEmail(email)) {
                     alert("Digite um e-mail válido!");
@@ -67,14 +57,13 @@
                     return false;
                 }
 
-               if ((document.perfil.habilitaSenha.checked)&&(!validaSenha(senha))){
-                 alert("Senha necessita de 8 digititos no minino!");
-                  document.perfil.senha.focus(); 
-                return false;
+                if ((document.perfil.habilitaSenha.checked) && (!validaSenha(senha))) {
+                    alert("Senha necessita de 8 digititos no minino!");
+                    document.perfil.senha.focus();
+                    return false;
+                }
+                return true;
             }
-            return true;
-          
-    }
             function habilitarDesabilitaSenha() {
                 // método que habilita ou desabilita o campo de senha
                 if (document.perfil.habilitaSenha.checked)

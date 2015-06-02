@@ -40,3 +40,20 @@ function validaEmail(email) {
 function validaSenha(senha) {
     return validaTexto(senha, 8);
 }
+
+/**
+ * Valida se a data (dd/MM/yyyy) está entre o ano inicial e final.
+ * @param {String} data 
+ * @param {Integer} anoInicial
+ * @param {Integer} anoFinal
+ * @returns {Boolean}
+ */
+function validaData(data, anoInicial, anoFinal){
+    if (data != null && data.length == 10) {
+         var dataAno = data.substr(6, 9); //recupera só a parte do ano da String
+         if (dataAno > anoInicial && dataAno < anoFinal) {
+             return true;
+         }
+    }
+    return false;
+}
