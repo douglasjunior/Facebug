@@ -66,6 +66,7 @@
         <error-code>404</error-code>
         <location>/Erro.jsp</location>
     </error-page>
+
     <welcome-file-list>
         <welcome-file>Timeline</welcome-file>
     </welcome-file-list>
