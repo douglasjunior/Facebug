@@ -5,18 +5,9 @@ package br.grupointegrado.facebug.model;
  */
 public class Amigo {
 
-    private int id;
     private Usuario usuario;
     private Usuario amigo;
     private boolean aceitou;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Usuario getUsuario() {
         return usuario;
@@ -44,8 +35,9 @@ public class Amigo {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + this.id;
+        int hash = 7;
+        hash = 23 * hash + (this.usuario != null ? this.usuario.hashCode() : 0);
+        hash = 23 * hash + (this.amigo != null ? this.amigo.hashCode() : 0);
         return hash;
     }
 
@@ -58,10 +50,13 @@ public class Amigo {
             return false;
         }
         final Amigo other = (Amigo) obj;
-        if (this.id != other.id) {
+        if (this.usuario != other.usuario && (this.usuario == null || !this.usuario.equals(other.usuario))) {
+            return false;
+        }
+        if (this.amigo != other.amigo && (this.amigo == null || !this.amigo.equals(other.amigo))) {
             return false;
         }
         return true;
     }
-
+    
 }
