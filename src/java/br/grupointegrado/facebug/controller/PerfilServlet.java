@@ -1,6 +1,8 @@
 package br.grupointegrado.facebug.controller;
 
 import br.grupointegrado.facebug.exception.ValidacaoException;
+import br.grupointegrado.facebug.model.Amigo;
+import br.grupointegrado.facebug.model.AmigoDAO;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Usuario;
@@ -24,7 +26,7 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
  * @author Douglas
  */
 public class PerfilServlet extends HttpServlet {
- 
+
     /**
      * Na requisição por GET devemos carregar todos os dados necessários para
      * exibir a página de perfil do isioário.<br>
@@ -39,20 +41,42 @@ public class PerfilServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String idParam = req.getParameter("id");
+            String acaoParam = req.getParameter("acao");
             Connection conn = (Connection) req.getAttribute("conexao");
+            Usuario usuarioLogado = (Usuario) req.getSession().getAttribute("usuario_logado");
+            /*
+             *  Verifica qual ação será executadas
+             */
+            if ("adicionar".equals(acaoParam)) {
+                doGetAdicionarAmigo(req, resp, conn, idParam);
+            } else if ("remover".equals(acaoParam)) {
+                doGetRemoverAmigo(req, resp, conn, idParam);
+            }
             /*
              * Tenta carregar o usuário através do ID, se não conseguir então carrega o usuário logado
              */
             Usuario usuario = new UsuarioDAO(conn).consultaId(ConversorUtil.stringParaInteger(idParam));
             if (usuario == null) {
-                usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+                usuario = usuarioLogado;
             }
             req.setAttribute("usuario", usuario);
             /*
-             * Carrega somentes as postagens do usuário que foi carregado. 
+             * Carrega somente as postagens do usuário que foi carregado. 
              */
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
+            /*
+             * Carrega todos os amigos do usuário do perfil
+             */
+            List<Amigo> amigos = new AmigoDAO(conn).consultaAmigos(usuario);
+            req.setAttribute("amigos", amigos);
+            /*
+             * Carrega a relação de amigo do usuário do perfil com o usuário logado (se eles não forem os mesmos)
+             */
+            if (!usuario.equals(usuarioLogado)) {
+                Amigo amigo = new AmigoDAO(conn).consultaUsuarioAmigo(usuario, usuarioLogado);
+                req.setAttribute("amigo", amigo);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível carregar o perfil completamente, tente novamente mais tarde.");
@@ -111,5 +135,48 @@ public class PerfilServlet extends HttpServlet {
         req.getSession().setAttribute("usuario_logado", dao.consultaId(usuario.getId()));
 
         req.getSession().setAttribute("mensagem_sucesso", "Os dados do usuário foram atualizados com sucesso.");
+    }
+
+    private void doGetAdicionarAmigo(HttpServletRequest req, HttpServletResponse resp, Connection conn, String idParam) throws SQLException {
+        UsuarioDAO usuarioDao = new UsuarioDAO(conn);
+        Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+        /*
+         * Recupera o usuário amigo e verifica se ele existe.
+         */
+        Usuario usuarioAmigo = usuarioDao.consultaId(ConversorUtil.stringParaInteger(idParam));
+        if (usuarioAmigo == null) {
+            // Se o usuário amigo não existe, então retorna sem fazer nada
+            return;
+        }
+        if (usuario.equals(usuarioAmigo)) {
+            // Se o amigo é igual ao usuário logado, então retorna sem fazer nada
+            return;
+        }
+        Amigo amigo = AmigoDAO.getUsuarioAmigo(usuario, usuarioAmigo);
+        new AmigoDAO(conn).inserir(amigo);
+    }
+
+    private void doGetRemoverAmigo(HttpServletRequest req, HttpServletResponse resp, Connection conn, String idParam) throws SQLException {
+        UsuarioDAO usuarioDao = new UsuarioDAO(conn);
+        Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+        /*
+         * Recupera o usuário amigo e verifica se ele existe.
+         */
+        Usuario usuarioAmigo = usuarioDao.consultaId(ConversorUtil.stringParaInteger(idParam));
+        if (usuarioAmigo == null) {
+            // Se o usuário amigo não existe, então retorna sem fazer nada
+            return;
+        }
+        if (usuario.equals(usuarioAmigo)) {
+            // Se o amigo é igual ao usuário logado, então retorna sem fazer nada
+            return;
+        }
+        AmigoDAO dao = new AmigoDAO(conn);
+        Amigo amigo = dao.consultaUsuarioAmigo(usuario, usuarioAmigo);
+        if (amigo == null) {
+            // Se a relação de amizade não existe, então retorna sem fazer nada
+            return;
+        }
+        dao.excluir(amigo);
     }
 }

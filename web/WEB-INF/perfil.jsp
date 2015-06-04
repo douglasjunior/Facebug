@@ -1,3 +1,4 @@
+<%@page import="br.grupointegrado.facebug.model.Amigo"%>
 <%@page import="java.util.List"%>
 <%@page import="br.grupointegrado.facebug.model.Postagem"%>
 <%@page import="br.grupointegrado.facebug.util.HtmlUtil"%>
@@ -5,7 +6,9 @@
 <%
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
+    Amigo amigo = (Amigo) request.getAttribute("amigo");
     List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
+    List<Amigo> amigos = (List<Amigo>) request.getAttribute("amigos");
 
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
@@ -98,14 +101,25 @@
                             <li class="active"><a href="#sobre">Sobre</a></li>
                             <li><a href="#fotos">Fotos</a></li>
                             <li><a href="#amigos">Amigos</a></li>
-                                <%-- se o usuário logado está acessando o próprio perfil, então exibe a aba Perfil 
-                                    e não exibe o botão "Adicionar amigo" --%>
+                                <%-- se o usuário logado está acessando o próprio perfil, então exibe a aba Perfil --%>
                                 <% if (usuarioLogado.equals(usuario)) { %>
                             <li><a href="#perfil">Perfil</a></li>
-                                <% } else { %>
-                            <li class="pull-right"><a href="#" class="btn btn-success">Adicionar amigo</a></li>
-                                <% }%>
+                                <% } %>
                         </ul>
+                        <%
+                            // Verifica se o usuário logado não está acessando o p´roprio perfil,
+                            // então exibe o botão "Adicionar amigo"
+                            if (!usuarioLogado.equals(usuario)) {
+                                // Verifica se existe a amizade ou não, então exibe Adicionar ou Remover
+                                if (amigo == null) {
+                        %>
+                        <a href="/Facebug/Perfil?acao=adicionar&id=<%=usuario.getId()%>" class="btn btn-success" >Adicionar amigo</a>
+                        <% } else {%>
+                        <a href="/Facebug/Perfil?acao=remover&id=<%=usuario.getId()%>" class="btn btn-danger" >Remover amigo</a>
+                        <%
+                                }
+                            }
+                        %>
                         <% if (mensagemErro != null) {%>
                         <div class="alert alert-error">
                             <%= mensagemErro%>
@@ -176,12 +190,15 @@
                                 <div class="container-fluid">
                                     <div class="row-fluid">
                                         <div class="span12 products">
-                                            <% for (int i = 0; i < 15; i++) { %>
+                                            <% for (Amigo a : amigos) {
+                                                    // Verifica qual dos dois objetos é o amigo, pois o outro será o p´roprio usuário
+                                                    Usuario usuarioAmigo = a.getUsuario().equals(usuario) ? a.getAmigo() : a.getUsuario();
+                                            %>
                                             <div class="product">
-                                                <a href="#" >
-                                                    <img src="/Facebug/Imagem?origem=usuario&id=999" class="nav-list-profile-image">
+                                                <a href="/Facebug/Perfil?id=<%=usuarioAmigo.getId()%>" >
+                                                    <img src="/Facebug/Imagem?origem=usuario&id=<%=usuarioAmigo.getId()%>" class="nav-list-profile-image">
                                                     <br class="blank-line" />
-                                                    Fulano de Tal
+                                                    <%=usuarioAmigo.getNomeCompleto()%>
                                                 </a>
                                             </div>
                                             <% } %>
