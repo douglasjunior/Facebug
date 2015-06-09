@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
         Pattern pl = Pattern.compile("[0-9]+");
         Pattern pn = Pattern.compile("[a-zA-Z]+");
         
-        if (pl.matcher(email).find() && pn.matcher(email).find()) {
+        if (!pl.matcher(email).find() || !pn.matcher(email).find()) {
             throw new ValidacaoException("A senha deve conter letras e numeros");                
         }             
             
