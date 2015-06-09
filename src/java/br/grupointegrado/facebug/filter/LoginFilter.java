@@ -97,7 +97,8 @@ public class LoginFilter implements Filter {
                 || servletPath.startsWith("/js/")
                 || servletPath.startsWith("/img/")
                 || servletPath.equals("/Imagem")
-                || servletPath.equals("/Erro.jsp");
+                || servletPath.equals("/Erro.jsp")
+                || servletPath.equals("/404.jsp");
         return isArquivoRecurso;
     }
 
