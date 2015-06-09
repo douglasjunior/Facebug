@@ -1,3 +1,4 @@
+<%@page import="br.grupointegrado.facebug.model.Foto"%>
 <%@page import="java.util.List"%>
 <%@page import="br.grupointegrado.facebug.model.Postagem"%>
 <%@page import="br.grupointegrado.facebug.util.HtmlUtil"%>
@@ -6,6 +7,8 @@
     Usuario usuarioLogado = (Usuario) session.getAttribute("usuario_logado");
     Usuario usuario = (Usuario) request.getAttribute("usuario");
     List<Postagem> postagens = (List<Postagem>) request.getAttribute("postagens");
+    
+    List<Foto> fotos = (List<Foto>) request.getAttribute("fotos");
 
     String mensagemErro = (String) request.getAttribute("mensagem_erro");
     String mensagemSucesso = (String) session.getAttribute("mensagem_sucesso");
@@ -153,14 +156,20 @@
                             </div>
                             <!-- TAB FOTOS -->
                             <div class="tab-pane" id="fotos">
-                                <h3>Album de fotos.</h3>
+                                <h3>Album de fotos.</h3><br/>
+                                <form  method="POST" action="Perfil" enctype="multipart/form-data" accept-charset="utf-8">
+                                    <input type="hidden" name="acao" value="salvarAlbum"/>
+                                    <input type="file" id="albumFoto" name="foto" value="" size="10000" /> 
+                                    <button type="submit">Enviar</button>
+                                    
+                                </form>
                                 <div class="container-fluid">
                                     <div class="row-fluid">
                                         <div class="span12 products">
-                                            <% for (int i = 0; i < 15; i++) { %>
+                                            <% for (Foto foto : fotos) { %>
                                             <div class="product">
                                                 <a href="#" >
-                                                    <img src="/Facebug/Imagem?origem=album&id=999" class="nav-list-profile-image">
+                                                    <img src="/Facebug/Imagem?origem=album&id=<%=foto.getId()%>" class="nav-list-profile-image">
                                                 </a>
                                             </div>
                                             <% } %>

@@ -1,6 +1,8 @@
 package br.grupointegrado.facebug.controller;
 
 import br.grupointegrado.facebug.exception.ValidacaoException;
+import br.grupointegrado.facebug.model.Foto;
+import br.grupointegrado.facebug.model.FotoDAO;
 import br.grupointegrado.facebug.model.Postagem;
 import br.grupointegrado.facebug.model.PostagemDAO;
 import br.grupointegrado.facebug.model.Usuario;
@@ -53,6 +55,13 @@ public class PerfilServlet extends HttpServlet {
              */
             List<Postagem> postagens = new PostagemDAO(conn).ultimasPostagens(usuario);
             req.setAttribute("postagens", postagens);
+            /*
+            Carrega as fotos do usuário.
+            */
+            
+            List<Foto> fotos = new FotoDAO(conn).consultaFotosUsuario(usuario.getId());
+            req.setAttribute("fotos", fotos);
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", "Não foi possível carregar o perfil completamente, tente novamente mais tarde.");
@@ -78,8 +87,11 @@ public class PerfilServlet extends HttpServlet {
             if ("editar".equals(acao)) {
                 doPostEditarPerfil(req, parametrosMultipart);
                 resp.sendRedirect("/Facebug/Perfil#perfil");
+            } else if ("salvarAlbum".equals(acao)) {
+                doPostSalvarFoto(req, parametrosMultipart);
+                resp.sendRedirect("/Facebug/Perfil#fotos");
+                System.out.println("ENTROU PARA SALVAR FOTO");
             }
-
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
             req.setAttribute("mensagem_erro", ex.getMessage());
@@ -112,4 +124,20 @@ public class PerfilServlet extends HttpServlet {
 
         req.getSession().setAttribute("mensagem_sucesso", "Os dados do usuário foram atualizados com sucesso.");
     }
+    
+     private void doPostSalvarFoto(HttpServletRequest req, Map<String, Object> parametrosMultipart) throws ServletException, IOException, ValidacaoException, FileUploadException, Exception {
+
+            Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+            Foto foto = FotoDAO.getFotoParameters(parametrosMultipart);
+            foto.setUsuario(usuario);
+            Connection conn = (Connection) req.getAttribute("conexao");
+
+            FotoDAO dao = new FotoDAO(conn);
+
+            dao.inserirFoto(foto);
+            req.getSession().setAttribute("mensagem_sucesso", "Foto Inserida com sucesso.");
+    }
+    
+    
+    
 }
