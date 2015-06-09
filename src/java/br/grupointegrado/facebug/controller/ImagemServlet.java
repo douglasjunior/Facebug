@@ -1,5 +1,8 @@
 package br.grupointegrado.facebug.controller;
 
+import br.grupointegrado.facebug.exception.ValidacaoException;
+import br.grupointegrado.facebug.model.Foto;
+import br.grupointegrado.facebug.model.FotoDAO;
 import br.grupointegrado.facebug.model.UsuarioDAO;
 import br.grupointegrado.facebug.util.ConversorUtil;
 import java.io.File;
@@ -12,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 
 /**
  * Servlet utilizado para carregamento de imagens do banco de dados.
@@ -92,18 +96,21 @@ public class ImagemServlet extends HttpServlet {
         return bytearray;
     }
 
-    private void doGetFotoAlbum(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        /*
-         IMPLEMENTAR
-         */
-        byte[] fotoAlbum = null;
-        // se o usuário não tem foto, então carrega uma imagem padrão
-        if (fotoAlbum == null) {
-            fotoAlbum = carregarImagemPadrao();
+    private void doGetFotoAlbum(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException, ValidacaoException, FileUploadException {
+        Connection conn = (Connection) req.getAttribute("conexao");
+        Integer idParam = ConversorUtil.stringParaInteger(req.getParameter("id"));
+
+        if (idParam == 0) {
+            // se o ID não foi informado, devolve um erro 400 BAD REQUEST
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
-        // escreve os bytes da imagem como resposta na requisição
+        Foto fotoAlbum = new FotoDAO(conn).consultaId(idParam);
+        // se o usuário não tem foto, então carrega uma imagem padrão
         OutputStream out = resp.getOutputStream();
-        out.write(fotoAlbum);
+
+        out.write(fotoAlbum.getFoto());
+
         out.flush();
     }
 }
