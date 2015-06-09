@@ -5,21 +5,26 @@
  */
 package br.grupointegrado.facebug.model;
 
-import br.grupointegrado.facebug.util.ConversorUtil;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import static sun.net.www.http.HttpClient.New;
 
 /**
+ * Classe responsável por manter o cadastro de Fotos no banco de dados.
  *
  * @author Rafael
  */
 public class FotoDAO extends DAO {
 
+    /**
+     * Cria um objeto Foto a partir dos parâmetros recebidos do formulário
+     * Multipart.
+     *
+     * @param parametrosMultipart
+     * @return
+     */
     public static Foto getFotoParameters(Map<String, Object> parametrosMultipart) {
         Foto foto = new Foto();
         foto.setFoto((byte[]) parametrosMultipart.get("foto"));
@@ -30,6 +35,13 @@ public class FotoDAO extends DAO {
         super(conn);
     }
 
+    /**
+     * Monta um objeto Foto a partir do Resultset.
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     @Override
     protected Object montaObjeto(ResultSet rs) throws SQLException {
         Foto foto = new Foto();
@@ -39,22 +51,40 @@ public class FotoDAO extends DAO {
         return foto;
     }
 
-    public List<Foto> consultaFotosUsuario(Integer idUsuarioParam) throws SQLException {
-        List fotos = consultaLista("SELECT * FROM foto WHERE id_usuario = ?", idUsuarioParam);
+    /**
+     * Retorna todas as fotos de um usuário.
+     *
+     * @param usuario
+     * @return
+     * @throws SQLException
+     */
+    public List<Foto> consultaFotosUsuario(Usuario usuario) throws SQLException {
+        List fotos = consultaLista("SELECT * FROM foto WHERE id_usuario = ?", usuario.getId());
         return fotos;
-
     }
 
+    /**
+     * Consulta uma foto a partir de seu ID.
+     *
+     * @param idParam
+     * @return
+     * @throws SQLException
+     */
     public Foto consultaId(Integer idParam) throws SQLException {
         Object fotos = consultaUm("SELECT * FROM foto WHERE id = ?", idParam);
         return (Foto) fotos;
-
     }
 
+    /**
+     * Insere uma nova foto no banco de dados.
+     *
+     * @param foto
+     * @throws SQLException
+     */
     public void inserirFoto(Foto foto) throws SQLException {
         executaSQL("INSERT INTO foto (foto, id_usuario) "
                 + "VALUES (?, ?) ",
                 foto.getFoto(),
-                foto.getUsuario().getId()); 
+                foto.getUsuario().getId());
     }
 }

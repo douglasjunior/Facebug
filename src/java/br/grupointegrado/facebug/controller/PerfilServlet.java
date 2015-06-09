@@ -82,7 +82,7 @@ public class PerfilServlet extends HttpServlet {
             /*
              Carrega as fotos do usuário.
              */
-            List<Foto> fotos = new FotoDAO(conn).consultaFotosUsuario(usuario.getId());
+            List<Foto> fotos = new FotoDAO(conn).consultaFotosUsuario(usuario);
             req.setAttribute("fotos", fotos);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -112,7 +112,6 @@ public class PerfilServlet extends HttpServlet {
             } else if ("salvarAlbum".equals(acao)) {
                 doPostSalvarFoto(req, parametrosMultipart);
                 resp.sendRedirect("/Facebug/Perfil#fotos");
-                System.out.println("ENTROU PARA SALVAR FOTO");
             }
         } catch (ValidacaoException ex) {
             ex.printStackTrace();
@@ -190,16 +189,27 @@ public class PerfilServlet extends HttpServlet {
         dao.excluir(amigo);
     }
 
+    /**
+     * Recebe a requisição com o formulário Multipart e grava a foto no banco de
+     * dados.
+     *
+     * @param req
+     * @param parametrosMultipart
+     * @throws ServletException
+     * @throws IOException
+     * @throws ValidacaoException
+     * @throws FileUploadException
+     * @throws Exception
+     */
     private void doPostSalvarFoto(HttpServletRequest req, Map<String, Object> parametrosMultipart) throws ServletException, IOException, ValidacaoException, FileUploadException, Exception {
-
         Usuario usuario = (Usuario) req.getSession().getAttribute("usuario_logado");
+        Connection conn = (Connection) req.getAttribute("conexao");
+        
         Foto foto = FotoDAO.getFotoParameters(parametrosMultipart);
         foto.setUsuario(usuario);
-        Connection conn = (Connection) req.getAttribute("conexao");
 
-        FotoDAO dao = new FotoDAO(conn);
-
-        dao.inserirFoto(foto);
-        req.getSession().setAttribute("mensagem_sucesso", "Foto Inserida com sucesso.");
+        new FotoDAO(conn).inserirFoto(foto);
+        
+        req.getSession().setAttribute("mensagem_sucesso", "Foto adicionada com sucesso.");
     }
 }
