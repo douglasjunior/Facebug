@@ -42,4 +42,14 @@ public class ValidacaoUtil {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }   
+    
+    public static boolean validaSenhaNumeroLetra(String senha){
+        Pattern pl = Pattern.compile("[0-9]+");
+        Pattern pn = Pattern.compile("[a-zA-Z]+");
+        
+        if (!pl.matcher(senha).find() || !pn.matcher(senha).find()) {
+            return true;
+        }
+        else return false;
+    }
 }

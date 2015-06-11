@@ -89,8 +89,14 @@ public class LoginServlet extends HttpServlet {
          * Sendo assim, quando a postagem for gravada com sucesso, temos que
          * efetuar um sendRedirec() para concluir o processo.
          */
+        String senha = req.getParameter("senha");        
         Usuario usuario = null;
         try {
+
+            if (ValidacaoUtil.validaSenhaNumeroLetra(senha)){
+                 throw new ValidacaoException("Informe uma senha que contenha numeros e letras.");
+            } 
+    
             usuario = UsuarioDAO.getUsuarioParameters(req);
             Connection conn = (Connection) req.getAttribute("conexao");
             new UsuarioDAO(conn).inserir(usuario);
