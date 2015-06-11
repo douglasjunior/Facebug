@@ -41,15 +41,20 @@ public class ValidacaoUtil {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
-    }   
-    
-    public static boolean validaSenhaNumeroLetra(String senha){
+    }
+
+    /**
+     * Validação padrão de senha do sistema.<br>
+     * Para ser considerada válida a senha deve ter no mínimo 8 caracteres,
+     * contendo letras e números.
+     *
+     * @param senha
+     * @return
+     */
+    public static boolean validaSenha(String senha) {
         Pattern pl = Pattern.compile("[0-9]+");
         Pattern pn = Pattern.compile("[a-zA-Z]+");
-        
-        if (!pl.matcher(senha).find() || !pn.matcher(senha).find()) {
-            return true;
-        }
-        else return false;
+
+        return validaString(senha, 8) && pl.matcher(senha).find() && pn.matcher(senha).find();
     }
 }

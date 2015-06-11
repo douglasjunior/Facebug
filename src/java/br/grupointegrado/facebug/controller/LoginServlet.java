@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
@@ -79,7 +79,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     private void efetuarCadastro(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         /*
          * Para evitar duplicidade na subimissão de uma requisição POST,
          * precisamos respeitar o padrão PRG: http://en.wikipedia.org/wiki/Post/Redirect/Get
@@ -89,14 +88,8 @@ public class LoginServlet extends HttpServlet {
          * Sendo assim, quando a postagem for gravada com sucesso, temos que
          * efetuar um sendRedirec() para concluir o processo.
          */
-        String senha = req.getParameter("senha");        
         Usuario usuario = null;
         try {
-
-            if (ValidacaoUtil.validaSenhaNumeroLetra(senha)){
-                 throw new ValidacaoException("Informe uma senha que contenha numeros e letras.");
-            } 
-    
             usuario = UsuarioDAO.getUsuarioParameters(req);
             Connection conn = (Connection) req.getAttribute("conexao");
             new UsuarioDAO(conn).inserir(usuario);

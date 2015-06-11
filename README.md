@@ -19,7 +19,7 @@ Contribuidores:
  * Antônio do Nascimento (https://github.com/antonioNascimento)
  * Assis Willys (https://github.com/AssisWillys)
  * Bruno Martins (https://github.com/BrunoMartinsdosSantos)
- * Douglas Americo (https://github.com/DouglasAmerico) *
+ * Douglas Americo (https://github.com/DouglasAmerico)
  * Douglas Siqueira (https://github.com/DOUGLASSIQUEIRA)
  * Edvaldo Szymonek (https://github.com/edvaldoszy)
  * Eliezar Macedo (https://github.com/eliezerint)

@@ -70,8 +70,8 @@ public class UsuarioDAO extends DAO {
 
         // Valida a senha somente se estiver cadastrando, ou se o "habilitaSenha" for selecionado.
         if (cadastrando || habilitaSenha) {
-            if (!ValidacaoUtil.validaString(senha, 8)) {
-                throw new ValidacaoException("Informe a senha com mais de 8 caracteres.");
+            if (!ValidacaoUtil.validaSenha(senha)) {
+                throw new ValidacaoException("Informe a senha com 8 caracteres ou mais, e que contenha letras e números.");
             }
         }
 
