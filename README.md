@@ -16,6 +16,7 @@ Tecnologias: Java Web com banco de dados MySQL
 Demo: http://douglasjunior.tk:8080/Facebug
 
 Contribuidores:
+ * Alisson Souza (https://github.com/alissonRocker)
  * Antônio do Nascimento (https://github.com/antonioNascimento)
  * Assis Willys (https://github.com/AssisWillys)
  * Bruno Martins (https://github.com/BrunoMartinsdosSantos)
