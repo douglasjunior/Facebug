@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.regex.Pattern;
 
 public class LoginServlet extends HttpServlet {
 
@@ -42,6 +43,25 @@ public class LoginServlet extends HttpServlet {
         tentativa = tentativa != null ? tentativa : 0;
 
         try {
+           //-------------------------------------------------------
+            // valida se contem numeros e letras na senha
+            
+        //String valor = "Minha390Senha"; // Se o valor contem somente letras ou somente número não passa, tem que conter os dois
+        
+        Pattern pl = Pattern.compile("[0-9]+");
+        Pattern pn = Pattern.compile("[a-zA-Z]+");
+        
+        if (!pl.matcher(email).find() || !pn.matcher(email).find()) {
+            throw new ValidacaoException("A senha deve conter letras e numeros");                
+        }             
+            
+//            if (email.matches("/([0-9]+|[a-zA-Z]+)/")) {
+//                throw new ValidacaoException("A senha deve conter letras e numeros");                
+//            }
+//            
+            
+            
+//---------------------------------------------------------------------------------            
             // valida se foi informado um e-mail válido
             if (!ValidacaoUtil.validaEmail(email)) {
                 throw new ValidacaoException("Informe um enedreço de e-mail válido.");
