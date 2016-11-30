@@ -21,6 +21,46 @@
 <html>
     <head>
         <%@include file="/WEB-INF/includes/header.jsp" %>
+                   function validarCamposPerfil() {
+                var nome = document.perfil.nome.value;
+                var sobrenome = document.perfil.sobrenome.value;
+                var email = document.perfil.email.value;
+                var nascimento = document.perfil.nascimento.value;
+                var apelido = document.perfil.apelido.value;
+                var senha = document.perfil.senha.value;
+
+                if (!validaTexto(nome)) {
+                    alert("O campo Nome deve ter no mínimo 1 caractere.");
+                    document.cadastro.nome.focus();
+                    return false;
+                }
+
+                if (!validaTexto(sobrenome)) {
+                    alert("O campo Sobrenome deve ter no mínimo 1 caractere.");
+                    document.cadastro.sobrenome.focus();
+                    return false;
+                }
+                if (!validaTexto(apelido)) {
+                    alert("O campo Apelido deve ter no mínimo 1 caractere.");
+                    document.cadastro.apelido.focus();
+                    return false;
+                }
+
+                if (!validaEmail(email)) {
+                    alert("Digite um e-mail válido!");
+                    document.cadastro.email.focus();
+                    return false;
+                }
+
+                if (!validaSenha(senha)) {
+                    alert("O campo Senha deve ter no mínimo 8 caracteres.");
+                    document.cadastro.senha.focus();
+                    return false;
+                }
+                
+                return true;
+            }
+        </script>
         <title>Facebug - Perfil</title>
         <style type="text/css">
             .product {
