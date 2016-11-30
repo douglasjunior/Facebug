@@ -229,7 +229,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="perfilFoto">Foto</label>
                                         <div class="controls">
-                                            <input type="file" id="perfilFoto" name="foto" value="" size="60" /> 
+                                            <input type="file" id="perfilFoto" name="foto" value=""  onclick="comprova_extensao(this.form, this.form.arquivoupload.value)"  size="60" /> 
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -311,5 +311,40 @@
                 });
             });
         </script>
+
+        <script type="text/javascript">
+            // Ecte
+            $(function(){ comprova_extensao(formulario, arquivo) {
+                extensoes_permitidas = new Array(".gif", ".jpg", ".jpeg" , ".PNG");
+                meuerro = "";
+                if (!arquivo) {
+                  
+                    meuerro = "Não foi selecionado nenhum arquivo";
+                } else {
+                  
+                    extensao = (arquivo.substring(arquivo.lastIndexOf("."))).toLowerCase();
+                    
+                    permitida = false;
+                    for (var i = 0; i < extensoes_permitidas.length; i++) {
+                        if (extensoes_permitidas[i] == extensao) {
+                            permitida = true;
+                            break;
+                        }
+                    }
+                    if (!permitida) {
+                        meuerro = "Comprova a extensão dos arquivos a subir. \nSó se podem subir arquivos com extensões: " + extensoes_permitidas.join();
+                    } else {
+                     
+                        alert("Tudo correto. Vou submeter o formulário.");
+                        formulario.submit();
+                        return 1;
+                    }
+                }
+              
+                alert(meuerro);
+                return 0;
+            });
+        </script>
+
     </body>
 </html>
